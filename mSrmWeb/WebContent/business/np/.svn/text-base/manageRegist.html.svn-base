@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    	
+    	var user_id1 = localStorage.user_id.substring(0, 3);
+        var user_id2 = localStorage.user_id.substring(3, 5);
+        var user_id3 = localStorage.user_id.substring(5, 10);
+	    var user_id = user_id1+"-"+user_id2+"-"+user_id3;
+	    document.getElementById("user_id").innerHTML = user_id;
+	//-------------------------------------------------------------------
+	// 파라미터 가져오기
+	//-------------------------------------------------------------------
+	var tradecd    = localStorage.tradecd;
+	var wrkcentcd  = localStorage.wrkcentcd;
+
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/np/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	
+    				
+      	
+
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/np/manageSiteList.jsp",
+ 			data : "tradecd="+tradecd+"&wrkcentcd="+wrkcentcd,
+			dataType : "jsonp",
+			jsonp : "callback",	 
+ 		    success : function(data) { 					// success & error
+
+ 		    	var site_rows =  data.siteLists;
+
+ 		    	var arr_sitecd = new Array();
+                var arr_sitenm = new Array();
+                
+                
+                for (var i = 0 ; i < site_rows.length ; i++){
+
+                    var plist = site_rows[i];
+                    
+                    if (plist != undefined || plist != null) {
+                    	arr_sitecd[i] = plist.sitecd;
+                    	arr_sitenm[i] = plist.sitenm;                        
+                    }
+
+                    $('#sitenm').append($('<option>').text(arr_sitenm[i]).attr('value', arr_sitecd[i]));
+                 
+                }
+
+			},
+        	complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+        		$('#sitenm').selectmenu('refresh');
+			},			    
+        	    error: function(e) {
+    	    	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	   	return false;
+        	}
+	} ); // end ajax			
+    			
+//-------------------------------------------------------------------
+
+
+   }); // ready
+   
+
+   
+</script>
+
+</head>
+
+<body>
+
+<script>
+
+$(function() {
+    $("#sitenm").change(function(){
+
+    	var tradecd   = localStorage.tradecd;
+        var wrkcentcd = localStorage.wrkcentcd;
+        var sitecd    = $('#sitenm').val();
+
+        $('#contnm').empty().data('options'); //셀렉트 리스트 초기화
+        $('#contnm').append($('<option>').text("계약명")); //셀렉트 리스트 초기값
+        
+        $.ajax( {
+            type : 'GET' ,
+            url: 'http://210.127.35.20:8080/jsp/np/manageContList.jsp' ,                
+            data : "sitecd="+sitecd+"&tradecd="+tradecd+"&wrkcentcd="+wrkcentcd,
+            dataType: 'jsonp',  
+            success : function(data) {                  // success & error
+
+                var cont_rows = data.contLists;
+                var arr_contnm = new Array();
+                var arr_contcd = new Array();
+
+                for (var i = 0 ; i < cont_rows.length ; i++){
+
+                    var plist = cont_rows[i];
+                    
+                    if (plist != undefined || plist != null) {
+                    	arr_contnm[i] = plist.buyreqnm;
+                    	arr_contcd[i] = plist.buyreqid;
+                    }
+
+                    $('#contnm').append($('<option>').text(arr_contnm[i]).attr('value', arr_contcd[i]));
+                    
+                }
+                
+            },
+            complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+            	$('#contnm').selectmenu('refresh');
+            },              
+                error: function(e) {
+                alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");                    
+                return false;
+            }
+        } ); // end ajax
+        
+    }) //#btn_save click
+}) //function
+
+$(function() {
+    $("#btn_save").click(function(){
+            
+    	var buyreqid  = $('#contnm').val();
+    	var sitecd    = $('#sitenm').val();
+    	var regdate   = $('#contdate').val();
+    	var reguserid = localStorage.bizno;
+    	var rmk       = $('#rmk').val();
+        
+        var gorul = "";
+
+        if(sitecd == null || sitecd == "") {
+            alert("현장명을 선택해 주세요.");
+            return false;
+        }
+        
+        if(buyreqid == null || buyreqid == "" || buyreqid == "계약명") {
+            alert("계약명을 선택해 주세요.");
+            return false;
+        }
+        
+        if(regdate == null || regdate == "") {
+            alert("등록일자를 입력해 주세요.");
+            return false;
+        }
+
+        $.ajax( {
+            type : 'GET' ,
+            url: 'http://210.127.35.20:8080/jsp/np/manageRegist.jsp' ,                
+            data : "buyreqid="+buyreqid+"&regdate="+regdate+"&reguserid="+reguserid+"&rmk="+rmk,
+            dataType: 'jsonp',  
+            success: function(data) {                   
+                if (data.errCode == "1")
+                {
+                    alert ("등록되었습니다.");
+                    gourl = '/business/np/manageList.html';
+                    goURL(gourl);
+                }
+                else if  (data.errCode == "0")
+                {
+                    alert ("저장도중 오류가 발생하였습니다. 관리자에게 문의하세요") ;
+                }
+                return false;
+            },
+            complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+            	
+            },               
+            error: function(e) {
+                alert ("서버연결중 오류가 발생하였습니다.  관리자에게 문의하세요.");                  
+                return false;
+            }
+        } ); // end ajax
+    }) //#btn_save click
+}) //function
+</script>
+
+<div data-role="page" id="page_sitedesc"  > 
+	<!-- header  -->
+	<div data-role="header" >		
+		<div id="mob_sub">		
+			<div id = "mob_header" >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">자재검수</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+  
+  
+	<!-- content -->
+ 	<div data-role="content">
+  
+    
+    <!-- Content -->    
+    <section class="section_content">
+    	<div class="veiw">
+        	<ul>
+            	<li><span>현장 :</span><select id="sitenm"><option value="">현장명</option></select></li>
+            	<li><span>계약 :</span><select id="contnm"><option value="">계약명</option></select></li>
+            	<li><span>등록일자 :</span><input type="date" data-clear-btn="false" id="contdate" value=""></li>
+            	<li><span>비고 :</span><textarea id="rmk"></textarea></li>
+            </ul>
+        </div>
+        <div>    
+            <ul>
+                <li><input type="button"  value="등   록"  id="btn_save" class="btn_save"></li>
+           </ul>
+        </div>
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Content -->  
+  
+  	<!-- footer -->	  
+	<nav id="my-menu">
+	  <ul>
+	    <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="user_id"></b></span></li><br>
+        <li><a href="/business/np/noticeList.html" target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+        <li><a href="/business/np/chargeInfo.html" target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>
+        <li><a href="/business/np/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+        <li><a href="/business/np/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+        <li><a href="/business/np/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+        <li><a href="/business/np/manageList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>자재검수</b></a></li><br>
+        <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>
+        <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="10%"> 로그아웃</a></li>
+	  </ul>
+	</nav>
+	 <!-- footer -->
+  
+  
+  
+</div>
+<!-- page -->
+</body>
+</html>

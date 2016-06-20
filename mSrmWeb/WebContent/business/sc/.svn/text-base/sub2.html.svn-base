@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<link rel="stylesheet" type="text/css" href="css/basic.css">
+<link rel="stylesheet" type="text/css" href="css/layout.css">
+</head>
+
+ <body id="sub">
+ <div id="wrap">
+  <div class="u_skip"><a href="#ct">본문 바로가기</a></div>
+ <!-- Header -->
+  <div id="header">
+        <section>
+            <button id="schn_btn" type="button" class="sch_hw">
+            	확장영역 열기
+            </button>
+            <h1 class="">
+                <a href="#" class="">전자계약
+                </a>
+            </h1>
+            <button id="schn_btn" type="button" class="home_hw">
+            	확장영역 열기
+            </button>
+        </section>
+    </div>
+ <!-- Header //-->
+  
+  <!-- Main -->
+  <div id="ct">
+  	<!-- Section Tab -->
+  	<div class="section_tab">
+    	<ul>
+        <li class="current"><a href="">진 행</a></li>
+        <li><a href="">완 료</a></li>
+        </ul>
+    
+    <!-- Tab Content -->
+    <form class="tab_content">
+        <div id="tab_001">
+            <select>
+                <option>을서명 요청</option>
+                <option>을서명 요청</option>
+                <option>을서명 요청</option>
+            </select>
+            
+            <select>
+                <option>2015년</option>
+                <option>2014년</option>
+                <option>2013년</option>
+            </select>
+        </div>
+        <div id="tab_002" style="display:none">
+            <select>
+                <option>을서명 요청</option>
+                <option>을서명 요청</option>
+                <option>을서명 요청</option>
+            </select>
+            
+            <select>
+                <option>2015년</option>
+                <option>2014년</option>
+                <option>2013년</option>
+            </select>
+        </div>
+    </form>
+    <!-- Tab Content //-->
+    </div>
+    <!-- Section Tab //-->
+    
+    <!-- Content -->
+    <section class="section_content">
+    	<div>
+            <dl>
+                <dt>[2015/05/01 을서명 요청] 터널방음문</dt>
+                <dd>00차 | 부산-울산 복선 철도 5공구</dd>
+            </dl>
+        </div>
+        <div>
+            <dl>
+                <dt>[2015/05/01 을서명 요청] 터널방음문</dt>
+                <dd>00차 | 부산-울산 복선 철도 5공구</dd>
+            </dl>
+        </div>
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Main //-->  
+</div>
+</body>
+</html>

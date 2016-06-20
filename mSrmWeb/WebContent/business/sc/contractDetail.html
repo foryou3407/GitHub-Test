@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+<script type="text/javascript">
+   $(document).ready(function() {	   
+	//-------------------------------------------------------------------
+	// 파라미터 가져오기
+	//-------------------------------------------------------------------
+	var all_params = $.getUrlVars();
+	var contphase   = $.getUrlVar("contphase");
+	var contno    = $.getUrlVar("contno");
+	var maxcontphase   = $.getUrlVar("maxcontphase");
+	//maxcontphase(해당 계약건의 최대 차수값) 값이 없을 경우 contphase 값을 넣어줌
+	if(maxcontphase==null||maxcontphase==""||maxcontphase==undefined){
+		maxcontphase=contphase;
+	}
+	// 로컬스토리지값 가져오기
+    var bizno_sub = localStorage.bizno.substring(0, 3)+"-"+localStorage.bizno.substring(3, 5)+"-"+localStorage.bizno.substring(5, 10);
+    document.getElementById("bizno_sub").innerHTML = bizno_sub;
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/sc/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	 
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/sc/contractDetail.jsp",
+ 			data : "contphase="+contphase+"&contno="+contno+"&maxcontphase="+maxcontphase ,
+			dataType : "jsonp",
+			jsonp : "callback",	 
+ 		    success : function(data) { 					// success & error
+ 		    	
+ 		    	
+				var sitecdnm  		 = data.sitecdnm ; 
+				var contnm   		 = data.contnm ;
+				var status   			 = data.status ;
+				var contdate   		 = data.contdate.substr(0,4)+"년 "+data.contdate.substr(4,2)+"월 "+data.contdate.substr(6,2)+"일"  ; 
+				var rcontamt   		 = makeMoneyType(data.rcontamt) ;
+				var contno   		 = data.contno ;
+				var contphase   	 = data.contphase ;
+				var constartdate     = data.constartdate ;
+				var conclosedate    = data.conclosedate ;
+				var addr   			 = data.addr ;
+								
+				$("#view_sitecdnm").html( sitecdnm )  ;			
+				$("#view_contnm").html( contnm  )  ;
+				$("#view_status").html( status  )  ;
+				$("#view_contdate").html( contdate )  ;			
+				$("#view_rcontamt").html( rcontamt  )  ;
+				$("#view_contno").html( contno  )  ;
+				$("#view_contphase").html( contphase  )  ;
+				$("#view_constartdate").html( constartdate  )  ;
+				$("#view_conclosedate").html( conclosedate  )  ;
+				$("#view_addr").html( addr  )  ;
+				
+				for (var i = -1 ; i < maxcontphase ; i++){
+					 var va = i+1;
+				     va = "0".concat(va).match(/\d{2}$/);    // 1 --> 01 1자리 차수의 경우 앞에 0을 추가
+				     if(va!=contphase){
+					 $('#view_contphaseselect').append($('<option>').text(va).attr('value', va));	
+				     }else{
+				     $('#view_contphaseselect').append($('<option>').text(va).attr('value', va).attr("selected", "selected"));	 
+				     }
+				}//end for
+
+			},
+        	complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+			},			    
+        	    error: function(e) {
+    	    	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	   	return false;
+        	}
+			
+
+	} ); // end ajax			
+	
+	
+
+   
+	
+    			
+//-------------------------------------------------------------------
+
+
+	
+   }); // ready
+   
+   function makeMoneyType(n) {
+       var reg = /(^[+-]?\d+)(\d{3})/;   // 정규식
+  	 n += '';                          // 숫자를 문자열로 변환         
+  	 while (reg.test(n)) {
+  	 	n = n.replace(reg, '$1' + ',' + '$2');
+  	 } 
+  	 n= n+" 원"
+  	  return n;
+  }
+
+   //차수변경 function
+   function changeContphase(){
+	    var contphase		 =$("#view_contphaseselect option:selected").val();
+		var contno   		 = $.getUrlVar("contno");
+		var maxcontphase   = $.getUrlVar("maxcontphase");
+		//maxcontphase 값이 없는 경우는 contphase 값과 동일하다.
+		if(maxcontphase==null||maxcontphase==""||maxcontphase==undefined){
+			maxcontphase=$.getUrlVar("contphase");
+		}
+	    gourl = '/business/sc/contractDetail.html?contno='+contno+'&contphase='+contphase+'&maxcontphase='+maxcontphase  ;
+		goURL(gourl);
+   }
+   
+</script>
+
+
+</head>
+
+ <body>
+
+<div data-role="page" id="page_notice"  > 
+	<!-- header  -->
+	<div data-role="header" data-position="fixed">		
+		<div id="mob_sub">		
+			<div id = "mob_header"  >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">전자계약</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+  
+  
+	<!-- content -->
+ 	<div data-role="content">
+  
+    
+    <!-- Content -->    
+    <section class="section_content">
+    	<div class="veiw">
+        	<ul>
+        		<li><span>· 계약건명 :</span><span id="view_contnm"></span></li>
+        		<li><span>· 계약차수 :</span><font color="darkblue" ><span id="view_contphase"></span></font></li>
+        		<li><span>· 상&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;태 :</span><font color="darkblue" ><span id="view_status"></span></font></li>
+				<li><span>· 계약일자 :</span><lu id="view_contdate"></lu></li>
+				<li><span>· 계약금액 :</span><lu id="view_rcontamt"></lu></li>
+        		<li><span>· 공사기간 :</span><lu id="view_constartdate"></lu><lu> ~ </lu><lu id="view_conclosedate"></lu></li>
+            	<li><span>· 현&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;장 :</span><span id="view_sitecdnm"></span>
+            	<br><lu id="view_addr"></lu></li><br>
+            	<select name="view_contphaseselect" id="view_contphaseselect"  onchange="javascript:changeContphase();">
+      						<option value=""  disabled= "disabled" )>- &nbsp;차수 변경&nbsp; -</option>
+      			</select>            	
+            </ul>      
+        </div>   
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Content -->  
+  
+  	<!-- footer -->	  
+	<nav id="my-menu">
+     <ul>
+       <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+       <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+       <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+       <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+       <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+       <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+       <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+       <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+       <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+       <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+       <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+     </ul>
+	</nav>
+	 <!-- footer -->
+  
+</div>
+<!-- page -->
+</body>
+</html>
+

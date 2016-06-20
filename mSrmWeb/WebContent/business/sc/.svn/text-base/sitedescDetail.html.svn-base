@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+
+<script type="text/javascript">
+   $(document).ready(function() {	   
+	//-------------------------------------------------------------------
+	// 파라미터 가져오기
+	//-------------------------------------------------------------------
+	var all_params = $.getUrlVars();
+	var nomiseq   = $.getUrlVar("nomiseq");
+	var tradecd    = $.getUrlVar("tradecd");
+	var p_view_attendreplyn_radio   = $.getUrlVar("p_view_attendreplyn_radio");
+	var p_attendreplrsn    = $.getUrlVar("p_attendreplrsn");
+	 // 로컬스토리지값 가져오기
+    var bizno_sub = localStorage.bizno.substring(0, 3)+"-"+localStorage.bizno.substring(3, 5)+"-"+localStorage.bizno.substring(5, 10);
+    document.getElementById("bizno_sub").innerHTML = bizno_sub;
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/sc/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	
+
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/sc/sitedescDetail.jsp",
+ 			data : "nomiseq="+ nomiseq+"&tradecd="+tradecd+"&p_view_attendreplyn_radio="+p_view_attendreplyn_radio+"&p_attendreplrsn="+p_attendreplrsn ,
+			dataType : "jsonp",
+			jsonp : "callback",	 
+ 		    success : function(data) { 					// success & error
+ 		    	
+ 		    	
+				var nomiseq   = data.nomiseq ; 
+				var sitenm   = data.sitenm ;
+				var connm   = data.connm ;
+				var biztypenm   = data.biztypenm ; 
+				var constartdate   = data.constartdate ;
+				var conclosedate   = data.conclosedate ;
+				var sitedescdatetm   = data.sitedescdatetm ; 
+				var usernm   = data.usernm ;
+				var sitedescplc   = data.sitedescplc ;
+				var sitetel   = data.sitetel ; 
+				var attendreplyn   = data.attendreplyn ;
+				var attendreplrsn   = data.attendreplrsn ;
+				var addr   = data.addr ;
+				var lat   = data.lat ;
+				var lng   = data.lng ;
+								
+				$("#view_nomiseq").html( nomiseq )  ;			
+				$("#view_sitenm").html( sitenm  )  ;
+				$("#view_connm").html( connm  )  ;
+				$("#view_biztypenm").html( biztypenm )  ;			
+				$("#view_constartdate").html( constartdate  )  ;
+				$("#view_conclosedate").html( conclosedate  )  ;
+				$("#view_sitedescdatetm").html( sitedescdatetm )  ;			
+				$("#view_usernm").html( usernm  )  ;
+				$("#view_sitedescplc").html( sitedescplc  )  ;
+				$("#view_sitetel").html( sitetel )  ;			
+				$("#view_attendreplyn").html( attendreplyn  )  ;
+				$("#view_attendreplrsn").html( attendreplrsn  )  ;
+				$("#view_addr").html( addr  )  ;
+				$("#view_lat").html( lat  )  ;
+				$("#view_lng").html( lng  )  ;
+				
+				
+				// Map 조회를 위해 위도,경도,주소값을 폼태그에 입력
+				document.getElementById("view_lng").value= data.lng;
+				document.getElementById("view_lat").value= data.lat;
+				document.getElementById("view_addr").value= data.addr;
+				
+				// 불참시 사유 입력
+				document.getElementById("attendreplrsn").value=  data.attendreplrsn;
+				
+				//참석여부 입력
+				if(attendreplyn=="Y"){
+					$("input:radio[name='view_attendreplyn_radio']:radio:input[value='Y']").attr("checked",true).checkboxradio("refresh");
+				}else if(attendreplyn=="N"){
+					$("input:radio[name='view_attendreplyn_radio']:radio:input[value='N']").attr("checked",true).checkboxradio("refresh");
+				}				
+				
+				
+			},
+        	complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+			},			    
+        	    error: function(e) {
+    	    	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	   	return false;
+        	}
+			
+
+	} ); // end ajax			
+	
+
+	
+    			
+//-------------------------------------------------------------------
+
+
+	
+   }); // ready
+   
+   function goMap(){
+		
+	   var lat = document.getElementById("view_lat").value;
+	   var lng = document.getElementById("view_lng").value;
+	   var addr = document.getElementById("view_addr").value;
+
+	   gourl =  '/business/sc/sitedescDetailMap.html?lat='+lat+'&lng='+lng+'&addr='+addr  ;		    			
+	   goURL(gourl);
+   }
+   
+</script>
+<style type="text/css">
+	.map_style{
+		padding: 0px;
+		height : 100%;
+		width: 100%;
+	}
+</style>
+
+</head>
+
+ <body>
+
+<div data-role="page" id="page_notice"   > 
+	<!-- header  -->
+	<div data-role="header" data-position="fixed">		
+		<div id="mob_sub">		
+			<div id = "mob_header" >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">현장설명</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+  
+  
+	<!-- content -->
+ 	<div data-role="content">
+  
+    
+    <!-- Content -->    
+    <section class="section_content">
+    	<div class="veiw">
+        	<ul>
+            	<li><span>· 현장 :</span><span id="view_sitenm"></span></li>
+            	<li><lu>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</lu><lu id="view_addr"></lu><lu><a href="javascript:goMap();"  target="_self"><img src="/images/map_001.png"></a></lu></li>            	
+                <li><span>· 업종 :</span><lu id="view_biztypenm"></lu></li>                
+                <li><span>· 하도급공사기간 :</span><lu id="view_constartdate"></lu><lu> ~ </lu><lu id="view_conclosedate"></lu></li>
+                <li><span>· 참석여부 :</li>
+                <li>
+                <ul>
+                
+                 <form data-ajax="false"  name="sitedescdetailForm" >
+                 
+             	   <label><input type="radio"  name="view_attendreplyn_radio"  id="view_attendreplyn_radio" value="Y"  />참가</label>
+             	   <label><input type="radio"  name="view_attendreplyn_radio"  id="view_attendreplyn_radio" value="N" />불참</label>
+                
+              <!--  체크된 값 가져오기  $(":input:radio[name=view_attendreplyn_radio]:checked").val()  -->
+               
+                
+                </li>
+                <li><span>· 불참시 사유 :</span></li>
+                <li><input type="text" value="" name="attendreplrsn" id="attendreplrsn"  maxlength="60"  ></li>
+                
+                 </form>
+                 </ul>
+                <li><span>· 현설일시 :</span><sapn id="view_sitedescdatetm"></sapn></li>
+                <li><span>· 현설장소 :</span><sapn id="view_sitedescplc"></sapn></li>
+                <li><span>· 현장설명 담당자 :</span><sapn id="view_usernm"></sapn><span> / </span><sapn id="view_sitetel"></sapn></li>
+            </ul>           
+        </div>  
+        <div>    
+            <ul>
+                <li><input type="button"  value="저   장"   id="btn_save"  class="btn_save" ></li>                        
+           </ul>
+        </div>     
+		
+		<form name="sitedescDetailMap" >
+			<input type="hidden" id="view_lng"  name="view_lng" >
+			<input type="hidden" id="view_lat"  name="view_lat" >
+			<input type="hidden" id="view_addr"  name="view_addr" >
+		</form>
+    
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Content -->  
+  
+  	<!-- footer -->	  
+	<nav id="my-menu">
+     <ul>
+       <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+       <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+       <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+       <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+       <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+       <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+       <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+       <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+       <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+       <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+       <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+     </ul>
+	</nav>
+	 <!-- footer -->
+  
+  
+  
+</div>
+<!-- page -->
+</body>
+</html>
+
+
+<script>
+
+function chkInput( sitedescdetailForm ) {
+	
+	var view_attendreplyn_radio = sitedescdetailForm.view_attendreplyn_radio.value;
+
+    var attendreplrsn = sitedescdetailForm.attendreplrsn.value;	
+
+   	if(view_attendreplyn_radio == "" ){
+		alert('참석여부를 입력하세요');
+		return false;
+	}	
+   	/*
+  	if(attendreplrsn == ""){
+		alert('불참시 사유를 입력하세요');
+		return false;
+	} 
+   	*/
+
+   	return true ;
+}	
+
+
+
+
+
+$(function() {
+	$("#btn_save").click(function(){
+		if ( chkInput( sitedescdetailForm ) ) {		
+			
+			var all_params = $.getUrlVars();
+			var nomiseq   = $.getUrlVar("nomiseq");
+			var tradecd    = $.getUrlVar("tradecd");
+			
+			
+			var gorul = "";		
+			var p_view_attendreplyn_radio 	= $(":input:radio[name=view_attendreplyn_radio]:checked").val() ;
+			var p_attendreplrsn = $('#attendreplrsn').val() ;
+			
+			$.ajax( {
+			    type : 'GET' ,
+			    url: 'http://210.127.35.20:8080/jsp/sc/sitedescDetailSave.jsp' ,			    
+				data : "nomiseq="+ nomiseq+"&tradecd="+tradecd+"&p_view_attendreplyn_radio="+p_view_attendreplyn_radio+"&p_attendreplrsn="+p_attendreplrsn ,
+			    dataType: 'jsonp',	
+			    success: function(data) {			    	
+			    	if (data.errCode == "1")
+			    	{
+			    		alert ("저장되었습니다.") ;
+			    		gourl =  '/business/sc/sitedescDetail.html?nomiseq='+nomiseq+'&tradecd='+tradecd  ;		    			
+			    		goURL(gourl);
+			    	}
+			    	else if  (data.errCode == "0")
+			    	{
+			    		alert ("저장도중 오류가 발생하였습니다. 관리자에게 문의하세요") ;
+			    	}
+			    	return false;
+			    },
+			    complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		       },			    
+			    error: function(e) {
+			    	alert ("서버연결중 오류가 발생하였습니다.  관리자에게 문의하세요.");			    	 
+			    	return false;
+			    }
+			} ); // end ajax
+			
+			
+
+			
+			
+			
+		} //chkInput
+	}) //#btn_save click
+}) //function
+</script>

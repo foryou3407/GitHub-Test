@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    	
+    	var user_id1 = localStorage.user_id.substring(0, 3);
+        var user_id2 = localStorage.user_id.substring(3, 5);
+        var user_id3 = localStorage.user_id.substring(5, 10);
+        var user_id = user_id1+"-"+user_id2+"-"+user_id3;
+        document.getElementById("user_id").innerHTML = user_id;
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		$("#my-menu").mmenu({
+        // options
+			slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/np/main.html";  ;
+			goURL(gourl);
+      	}); // btn_home tap
+	
+    				
+      	
+
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/np/noticeList.jsp",
+ 			data : "",
+ 		    dataType: 'jsonp',
+ 		    success : function(data) { 					// success & error
+				var records  = data.records ; 
+				var req_rows =  data.noticeLists;
+
+				// 배열선언
+				var arr_seq    = new Array();
+				var arr_title  = new Array();
+				
+				var html1 = "";				
+				var gourl = "";
+				var count = 10;
+				
+				// 데이터 로우의 숫자가 10보다 작을경우 count 값을 데이터 로우 값으로 설정해 준다
+                if(req_rows.length < 10){
+                    count = req_rows.length;
+                }
+				
+			    // 각 데이터를 배열에 담는다 
+				for (var i = 0 ; i < count ; i++){
+					
+				    var plist    = req_rows[i];
+				    arr_seq[i]   = plist.seq;
+				    arr_title[i] = plist.title;
+				    				
+					gourl = '/business/np/noticeDetail.html?seq='+arr_seq[i];
+			        html1 += '<li><a href=javascript:goURL("'+ gourl +'");><h3>'+ arr_title[i] + '</h3></a></li>';
+				    
+				}
+
+                $loadMore = $('#noticeList').children('.load-more');
+                $('#noticeList').append((html1)).append($loadMore);
+                
+                // 데이터의 갯수가 10개 이하일 경우 더보기 버튼을 가린다.
+                if (req_rows.length < 11){
+                    $loadMore.hide();
+                }
+			    
+                $loadMore.bind('click', function () {
+                	//if (count < req_rows.length) {
+               		count1 = count;
+               		count  = count + 10;
+               		var html2 = "";
+                	for (var i = count1 ; i < count ; i++){
+                		if (req_rows[i] != null) {
+                			
+	                        var plist    = req_rows[i];
+	                        arr_seq[i]   = plist.seq;	                        
+	                        arr_title[i] = plist.title;
+	                        
+	                        gourl = '/business/np/noticeDetail.html?seq='+arr_seq[i];
+	                        html2 += '<li><a href=javascript:goURL("'+ gourl +'");><h3>'+ arr_title[i] + '</h3></a></li>';
+	                        
+                		}
+                    }
+                	//}
+	                if (req_rows[i] != null) {
+	                    $('#noticeList').append((html2)).append($loadMore);
+	                } else {
+	                	$('#noticeList').append((html2))
+	                	$loadMore.hide();
+	                }
+                    $('#noticeList').listview('refresh');
+                });
+
+                $('#noticeList').listview('refresh');
+
+		},
+		complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		},			    
+        error: function(e) {
+        	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	return false;
+		}
+	} ); // end ajax			
+	
+//-------------------------------------------------------------------
+
+
+   }); // ready
+
+</script>
+
+
+</head>
+<body>
+
+<div data-role="page" id="page_notice">
+	<!-- header  -->
+	<div data-role="header" data-position="fixed">
+		<div id="mob_sub">
+			<div id = "mob_header">
+				<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">공지사항</h1>
+		        <div id ="btn_home" class="home_hw" ></div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+	
+	<!-- content -->
+ 	<div data-role="content">
+ 		<div>
+
+    
+    	<section class="section_content">
+    	<div>
+		<ul data-role="listview" id="noticeList">		    
+          <li class="load-more" style="text-align:center;font-weight:bold;">더보기...</li>
+ 		</ul>
+
+        </div>
+    	</section>
+		</div>
+ 		
+  	</div>
+	<!-- content -->
+		
+	<!-- footer -->	  
+	<nav id="my-menu">
+	  <ul>
+	    <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="user_id"></b></span></li><br>
+        <li><a href="/business/np/noticeList.html" target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+        <li><a href="/business/np/chargeInfo.html" target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>
+        <li><a href="/business/np/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+        <li><a href="/business/np/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+        <li><a href="/business/np/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+        <li><a href="/business/np/manageList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>자재검수</b></a></li><br>
+        <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>
+        <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="10%"> 로그아웃</a></li>
+	  </ul>
+	</nav>
+	 <!-- footer -->
+	
+</div>
+<!-- /page -->
+
+
+</body>
+</html>

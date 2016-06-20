@@ -1,0 +1,53 @@
+<html>
+<head>
+<script src="http://mmenu.frebsite.nl/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="http://mmenu.frebsite.nl/mmenu/js/jquery.mmenu.min.all.js?v=5.2.0" type="text/javascript"></script>
+<link href="http://mmenu.frebsite.nl/mmenu/css/jquery.mmenu.css" type="text/css" rel="stylesheet" />
+<link href="http://mmenu.frebsite.nl/demo/inc/demo.css?v=5.2.0" type="text/css" rel="stylesheet" />
+   <script type="text/javascript">
+   $(function() {
+    $("#my-menu").mmenu({
+        slidingSubmenus: false
+        }).on( 'click', 'a[href^="#/"]',
+            function() {
+                alert( "Thank you for clicking, but that's a demo link." );
+                return false;
+            }
+        );
+      var API = $("#my-menu").data( "mmenu" );
+     
+      $("#my-button").click(function() {
+         API.open();
+      });
+      $("#my-button").click(function() {
+         API.close();
+      });
+   });
+</script>
+</head>
+<body>
+<nav id="my-menu">
+   <ul>
+      <li><a href="/"><font size=13>Home</font></a></li>
+      <li><a href="/about/"><font size=13>About us</font></a>
+         <ul>
+            <li><a href="/about/history/"><font size=13>History</font></a></li>
+            <li><a href="/about/team/"><font size=13>The team</font></a></li>
+            <li><a href="/about/address/"><font size=13>Our address</font></a></li>
+         </ul>
+      </li>
+      <li><a href="#contact"><font size=13>Contact</font></a></li>
+   </ul>
+</nav>
+<div> <!-- the wrapper -->
+      <div id="my-header">...</div>
+      <div id="my-content">...</div>
+      <div id="my-footer">...</div>
+<a href="#my-menu"><font size=13>Open the menu</font></a> <br><br><br><br>
+<a href="#my-page"><font size=13>Close the menu</font></a>
+
+<!-- http://kin.naver.com/qna/detail.nhn?d1id=1&dirId=105&docId=225335234&qb=66qo67CU7J28IOyKrOudvOydtOuTnCDrqZTribQ=&enc=utf8&section=kin&rank=2&search_sort=0&spq=0&pid=SSrI4soRR1sssu7GdBssssssssK-175716&sid=%2BP7%2B15ulpO9SCwGMl0mVpw%3D%3D
+-->
+</div>
+</body>
+</html>

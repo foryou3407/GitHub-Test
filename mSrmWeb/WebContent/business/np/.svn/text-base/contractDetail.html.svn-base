@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    	
+    	var user_id1 = localStorage.user_id.substring(0, 3);
+        var user_id2 = localStorage.user_id.substring(3, 5);
+        var user_id3 = localStorage.user_id.substring(5, 10);
+	    var user_id = user_id1+"-"+user_id2+"-"+user_id3;
+	    document.getElementById("user_id").innerHTML = user_id;
+	//-------------------------------------------------------------------
+	// 파라미터 가져오기
+	//-------------------------------------------------------------------
+	var all_params = $.getUrlVars();
+	var buyreqid   = $.getUrlVar("buyreqid");
+	var chgdegree  = $.getUrlVar("chgdegree");
+	var tradecd    = $.getUrlVar("tradecd");
+	var wrkcentcd  = $.getUrlVar("wrkcentcd");
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/np/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	
+    				
+      	
+
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/np/contractDetail.jsp",
+ 			data : "buyreqid="+buyreqid+"&chgdegree="+chgdegree+"&tradecd="+tradecd+"&wrkcentcd="+wrkcentcd,
+			dataType : "jsonp",
+			jsonp : "callback",	 
+ 		    success : function(data) { 					// success & error
+
+ 		    	var buyreqnm         = data.buyreqnm;
+ 		    	var contdate         = data.contdate;
+ 		    	var supplyamt        = data.supplyamt;
+ 		    	var deliveryterm     = data.deliveryterm;
+ 		    	var sitenm           = data.sitenm;
+				var siteaddr         = data.siteaddr;
+				var paymentcd        = data.paymentcd;
+				var deliverycd       = data.deliverycd;
+				var buybackcondition = data.buybackcondition;
+				var prepaycondition  = data.prepaycondition;
+				var iscontguar       = data.iscontguar;
+				var iselguar         = data.iselguar;
+				var isprepayguar     = data.isprepayguar;
+				var isflawguar       = data.isflawguar;
+				//var lat = data.lat;
+				//var lng = data.lng;
+
+				$("#view_buyreqnm").html(buyreqnm);
+				$("#view_contdate").html(contdate);
+				$("#view_supplyamt").html(supplyamt);
+                $("#view_deliveryterm").html(deliveryterm);
+				$("#view_sitenm").html(sitenm);
+				$("#view_siteaddr").html(siteaddr);
+				$("#view_paymentcd").html(paymentcd);
+				$("#view_deliverycd").html(deliverycd);
+				$("#view_buybackcondition").html(buybackcondition);
+				$("#view_prepaycondition").html(prepaycondition);
+
+                
+				//보증증권 체크
+                if(iscontguar == "Y"){
+                    $("input:checkbox[name='iscontguar']").attr("checked",true).checkboxradio("refresh");
+                }
+                if(iselguar == "Y"){
+                    $("input:checkbox[name='iselguar']").attr("checked",true).checkboxradio("refresh");
+                }
+                if(isprepayguar == "Y"){
+                    $("input:checkbox[name='isprepayguar']").attr("checked",true).checkboxradio("refresh");
+                }
+                if(isflawguar == "Y"){
+                    $("input:checkbox[name='isflawguar']").attr("checked",true).checkboxradio("refresh");
+                }
+				
+			},
+        	complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+			},			    
+        	    error: function(e) {
+    	    	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	   	return false;
+        	}
+	} ); // end ajax			
+    			
+//-------------------------------------------------------------------
+
+
+   }); // ready
+</script>
+
+</head>
+
+<body>
+
+<div data-role="page" id="page_contract"  > 
+	<!-- header  -->
+	<div data-role="header" >		
+		<div id="mob_sub">
+			<div id = "mob_header" >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">전자계약</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+  
+  
+	<!-- content -->
+ 	<div data-role="content">
+  
+    
+    <!-- Content -->    
+    <section class="section_content">
+    	<div class="veiw">
+        	<ul>
+            	<li><span>계약건명 :</span><span id="view_buyreqnm"></span></li>
+                <li><span>계약일자 :</span><lu id="view_contdate"></lu></li>                
+                <li><span>계약금액 :</span><lu id="view_supplyamt"></lu></li>
+                <li><span>납품기간 :</span><lu id="view_deliveryterm"></lu></li>
+                <li><span>현장명 :</span><lu id="view_sitenm"></lu><br><lu id="view_siteaddr"></lu></li>
+                <li><span>대금지급조건 :</span><lu id="view_paymentcd"></lu></li>
+                <li><span>인도조건 :</span><lu id="view_deliverycd"></lu></li>
+                <li><span>Buy Back 조건 :</span><lu id="view_buybackcondition"></lu></li>
+                <li><span>선급금 조건 :</span><lu id="view_prepaycondition"></lu></li>
+                <li><span>제증권 :</span></li>
+                 <form>
+    <fieldset data-role="controlgroup" data-type="horizontal">
+        <input type="checkbox" name="iscontguar" id="iscontguar">
+        <label for="iscontguar">이행</label>
+        <input type="checkbox" name="iselguar" id="iselguar">
+        <label for="iselguar">근재</label>
+        <input type="checkbox" name="isprepayguar" id="isprepayguar">
+        <label for="isprepayguar">선급금</label>
+        <input type="checkbox" name="isflawguar" id="isflawguar">
+        <label for="isflawguar">하자</label>
+    </fieldset>
+</form>
+            </ul>
+        </div>
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Content -->  
+  
+  	<!-- footer -->	  
+	<nav id="my-menu">
+	  <ul>
+	    <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="user_id"></b></span></li><br>
+	    <li><a href="/business/np/noticeList.html" target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+	    <li><a href="/business/np/chargeInfo.html" target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>
+	    <li><a href="/business/np/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+	    <li><a href="/business/np/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+	    <li><a href="/business/np/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+	    <li><a href="/business/np/manageList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>자재검수</b></a></li><br>
+	    <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>
+	    <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="10%"> 로그아웃</a></li>
+	  </ul>
+	</nav>
+	 <!-- footer -->
+  
+  
+  
+</div>
+<!-- page -->
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+<script type="text/javascript">
+   $(document).ready(function() {	   
+	// 로컬스토리지값 가져오기
+	 var bizno_sub = localStorage.bizno.substring(0, 3)+"-"+localStorage.bizno.substring(3, 5)+"-"+localStorage.bizno.substring(5, 10);
+	 document.getElementById("bizno_sub").innerHTML = bizno_sub; 
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/sc/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/sc/resultList.jsp",
+ 			data : "tradecd="+localStorage.tradecd  ,
+ 		    dataType: 'jsonp',
+ 		    success : function(data) { 					// success & error
+				var records   = data.records ; 
+				var req_rows =  data.result;
+				
+				// 배열선언
+				var arr_sitecd 				= new Array();
+				var arr_sitenm 				= new Array();
+				var arr_status 				= new Array();
+				var arr_chgdgr			    = new Array();
+				var arr_appraisestdt 		= new Array();
+				var arr_appraiseeddt 		= new Array();
+
+				
+				var html  = "";
+				var title = "";
+				var gourl = "";
+				var count = 10;
+				
+				var val ;
+				var tex ;
+				var chg ;
+				
+				$("#view_siteselect option:eq(0)").remove();
+				//현장 목록을 select 에 담는다
+				for(var i = 0 ; i < req_rows.length; i++){
+					var selectbox = req_rows[i];
+				    val = selectbox.sitecd;
+				    tex = selectbox.sitenm ;
+				    chg = selectbox.chgdgr ;
+				    chg = "0".concat(chg).match(/\d{2}$/);    // 1 --> 01 1자리 차수의 경우 앞에 0을 추가
+			    	if(chg=='01'){
+			    		
+			    		 
+			    		//	if(i==0){
+			    		//		$("#view_siteselect option:eq(1)").remove();
+			    		//		$("#view_siteselect option:eq(2)").remove();
+			    		//		$("#view_siteselect option:eq(3)").remove();
+			    		//	}
+				    	    $('#view_siteselect').append($('<option>').text(tex).attr('value',val).attr("selected", "selected"));	
+				    //	    $("#view_siteselect").val(val); 
+				    //	    $("#view_siteselect option:eq(1)").attr("selected", "selected");
+				    //	    $("#view_siteselect option:eq(0)").remove();
+			    			
+				     	}
+			    		
+				}
+				// 셀렉트 박스 초기값 설정 : 1. 선택값, 2.첫번째 값
+				if($.getUrlVar("sitecd")==null||$.getUrlVar("sitecd")==''){
+					$("#view_siteselect option:eq(1)").attr("selected", "selected");
+				}else{
+					$("#view_siteselect").val($.getUrlVar("sitecd"));
+				}
+		
+				// 데이터 로우의 숫자가 10보다 작을경우 count 값을 데이터 로우 값으로 설정해 준다
+				if(req_rows.length<10){
+					count = req_rows.length;
+				}
+					
+				var tradecd = localStorage.tradecd;
+				
+				
+					// 각 데이터를 배열에 담는다 
+				for (var i = 0 ; i < count; i++){
+				    var plist = req_rows[i];
+				    arr_sitecd [i]    	 		   = plist.sitecd  ;
+				    arr_sitenm [i]  		       = plist.sitenm  ;
+				    arr_status[i]    			   = plist.status ;
+				    arr_chgdgr[i]    	 		   = plist.chgdgr ;
+				    arr_appraisestdt[i]         = plist.appraisestdt.substr(0, 4)+"-"+plist.appraisestdt.substr(4, 2)+"-"+plist.appraisestdt.substr(6, 2) ;
+				    arr_appraiseeddt[i]        = plist.appraiseeddt.substr(0, 4)+"-"+plist.appraiseeddt.substr(4, 2)+"-"+plist.appraiseeddt.substr(6, 2) ;
+				   
+				    var urlsitecd =$.getUrlVar("sitecd");
+				    var sitecd;
+				    var firstsitecd = req_rows[0].sitecd
+				    
+				    //선택한 현장만 보여줄 수 있도록 sitecd 값 설정:  1. 선택한 현장, 2.첫번째 현장
+				    if(urlsitecd==''||urlsitecd==null){
+				    	sitecd=firstsitecd;
+				    }else{
+				    	sitecd=urlsitecd;
+				    }
+				    
+				    
+				    
+					//선택한 현장만 보여준다
+				    if(arr_sitecd [i]==sitecd){
+	
+						//현재 선택된 현장명과 진행상태를 보여줌
+						$("#view_sitenm").html( arr_sitenm [i] )  ;
+						$("#view_status").html( arr_status[i]  )  ;
+						
+						gourl = '/business/sc/resultDetail.html?sitecd='+arr_sitecd[i]+'&chgdgr='+arr_chgdgr[i]  ;					
+				        html += '<li><a href=javascript:goURL("'+ gourl +'");>';
+				        html += '<lu><p>차&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;수 : '+arr_chgdgr[i]+'</lu>';
+				        html += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lu>평가기간 : '+arr_appraisestdt[i]+'~'+arr_appraiseeddt[i]+'</lu></p></a></li>';	
+				    }else{
+				    	//선택안된 현장을 조회할 경우, count 의 값을 늘려준다(선택현장을 10개 조회할 수 있도록)
+				    	count = count+1;
+				    }
+				}
+			//for end		
+			
+				$loadMore = $('#resultList').children('.load-more');
+                $('#resultList').append((html)).append($loadMore);
+                
+                // 데이터의 갯수가 10개 이하일 경우 더보기 버튼을 가린다.
+                if (req_rows.length<11){
+                	$loadMore.hide();
+                }
+                      
+                $loadMore.bind('click', function () {
+                    //if (count < req_rows.length) {
+                    count1 = count;
+                    count  = count + 10;
+                    var html2 = "";
+                    for (var i = count1 ; i < count ; i++){
+                        if (req_rows[i] != null) {
+                        	var plist = req_rows[i];
+        				    arr_sitecd [i]    	 		   = plist.sitecd  ;
+        				    arr_sitenm [i]  		       = plist.sitenm  ;
+        				    arr_status[i]    			   = plist.status ;
+        				    arr_chgdgr[i]    	 		   = plist.chgdgr ;
+        				    arr_appraisestdt[i]         = plist.appraisestdt.substr(0, 4)+"-"+plist.appraisestdt.substr(4, 2)+"-"+plist.appraisestdt.substr(6, 2) ;
+        				    arr_appraiseeddt[i]        = plist.appraiseeddt.substr(0, 4)+"-"+plist.appraiseeddt.substr(4, 2)+"-"+plist.appraiseeddt.substr(6, 2) ;
+        				   
+        				    var urlsitecd =$.getUrlVar("sitecd");
+        				    var sitecd;
+        				    var firstsitecd = req_rows[0].sitecd
+        				    
+        				    //선택한 현장만 보여줄 수 있도록 sitecd 값 설정:  1. 선택한 현장, 2.첫번째 현장
+        				    if(urlsitecd==''||urlsitecd==null){
+        				    	sitecd=firstsitecd;
+        				    }else{
+        				    	sitecd=urlsitecd;
+        				    }
+   
+        					//선택한 현장만 보여준다
+        				    if(arr_sitecd [i]==sitecd){
+        	
+        						//현재 선택된 현장명과 진행상태를 보여줌
+        						$("#view_sitenm").html( arr_sitenm [i] )  ;
+        						$("#view_status").html( arr_status[i]  )  ;
+        						
+        						gourl = '/business/sc/resultDetail.html?sitecd='+arr_sitecd[i]+'&chgdgr='+arr_chgdgr[i]  ;					
+        				        html2 += '<li><a href=javascript:goURL("'+ gourl +'");>';
+        				        html2 += '<lu><p>차&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;수 : '+arr_chgdgr[i]+'</lu>';
+        				        html2 += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<lu>평가기간 : '+arr_appraisestdt[i]+'~'+arr_appraiseeddt[i]+'</lu></p></a></li>';	
+        				    }
+                        }
+                    }
+                //}
+                    
+                 // sitecd 비교값 설정 1. url 바가 있는경우 그 현장으로 2. 없는경우 첫번째 조회 현장(셀렉트 박스 초기 설정값과 동일)
+    				if($.getUrlVar("sitecd")==null||$.getUrlVar("sitecd")==''){
+					var bsitecd =  req_rows[0].sitecd
+    				}else{
+    				var bsitecd = 	$.getUrlVar("sitecd");
+    				}
+                    
+                    
+                    
+                    if (req_rows[i] != null && req_rows[i].sitecd ==bsitecd) {  
+                    	$('#resultList').append((html2)).append($loadMore);
+                    } else {
+                        $('#resultList').append((html2))
+                        alert(i);
+                        $loadMore.hide();
+                    }
+                    
+                    $('#resultList').listview('refresh');
+                });
+
+                $('#resultList').listview('refresh');
+
+			/*	
+			$("#sitedescList").html(html);
+			$('#sitedescList').listview('refresh');
+			*/	
+			
+		},
+		complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		},			    
+        error: function(e) {
+        	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	return false;
+		}
+	} ); // end ajax			
+    			
+//-------------------------------------------------------------------
+
+
+   }); // ready
+   
+   //현장변경 function
+   function changeSitecd(){
+	    var sitecd		 =$("#view_siteselect option:selected").val();
+	    gourl = '/business/sc/resultList.html?sitecd='+sitecd ;
+		goURL(gourl);
+   }
+   
+   
+   
+</script>
+
+
+</head>
+<body>
+
+<div data-role="page" id="page_notice"  > 
+	<!-- header  -->
+	<div data-role="header"  data-position="fixed">		
+		<div id="mob_sub">		
+			<div id = "mob_header" >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">결과분석 및 개선</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+
+
+		
+	<!-- content -->
+ 	<div data-role="content">
+
+ 		 <div>
+        	 <li><span>현&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;장 : </span><span id="view_sitenm"></span> (<span id="view_status"></span>) <li>
+			 <select name="view_siteselect" id="view_siteselect"  onchange="javascript:changeSitecd();">
+		 	<option value="1"  disabled= "disabled" >- &nbsp;현장 변경&nbsp; -</option>  	
+			 </select>  
+       	 </div><br>	
+ 		<div>   
+	    	<section class="section_content">
+		    	<div>
+					<ul id="resultList" data-role="listview">
+					  <li class="load-more" style="text-align:center;font-weight:bold;">더보기...</li>
+			 		</ul>
+		        </div>
+	    	</section>
+		</div>
+ 		
+  	</div>
+	<!-- content -->
+		
+	<!-- footer -->	  
+	<nav id="my-menu">
+     <ul>
+       <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+       <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+       <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+       <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+       <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+       <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+       <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+       <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+       <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+       <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+       <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+  </ul>
+  </nav>
+	 <!-- footer -->
+	
+</div>
+<!-- /page -->
+
+</body>
+</html>

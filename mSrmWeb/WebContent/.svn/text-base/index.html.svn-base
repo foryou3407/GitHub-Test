@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<!-- JS -->
+<script type="text/javascript" charset="utf-8" src="/js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/jquery.mobile-1.4.5.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+
+<!-- 
+<script src="//code.jquery.com/jquery.min.js"></script>
+<script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+ -->
+<script type="text/javascript">
+$(document).bind("mobileinit" , function(){
+	$.support.cors = true;
+	$.mobile.allowCrossDomainPages = true; 
+});
+</script>
+</head>
+
+ <body id="mob_body">
+ <div id="wrap">
+  <div class="u_skip"><a href="#ct">본문 바로가기</a></div>
+ <!-- Header -->
+  <div id="header">
+        <section>
+            <h1 class="">
+                <a href="#" class="">
+                    <img src="images/logo.png" alt="동부건설">
+                </a>
+            </h1>
+        </section>
+    </div>
+ <!-- Header //-->
+  
+  <!-- Main -->
+  <div id="ct">
+  <!-- Login Tab -->
+  	<div class="login_tab">
+    	<h1>회원사 구분</h1>
+        <ul>
+        <li  id="gubun01" class="current">
+            <dl>
+                <dt><div id="gu01">외주</div></dt>
+                <dd>바로가기</dd>
+            </dl>
+        </li>
+        <li id="gubun02" class="tab">
+            <dl>
+                <dt><div id="gu02">자재</div></dt>
+                <dd>바로가기</dd>
+            </dl>
+        </li>
+        </ul>
+    </div>
+  <!-- Login Tab //-->
+  
+  <!-- Section Login -->
+  <!--form method="post" action="#" class="section_login"-->
+  <form data-ajax="false"  id="loginForm" name="loginForm"  class="section_login">
+      <ul>
+      <li><input type="text" value="회원사 아이디 or 사업자 번호" name="user_id" id="user_id"  maxlength="11"  onfocus="this.value='';"></li>
+      <li><input type="password"  name="user_pwd" id="user_pwd"   maxlength="15 "  value="비밀번호" onfocus="this.value='';"></li>
+      </ul>
+      <input type="hidden"  name="gubun" id="gubun"  >
+      <div id= "btn_login"  class="btn_login" >로그인</div> 
+      
+  </form>
+  <!-- Section Login //-->
+  
+  </div>
+  <!-- Main //-->  
+</div>
+</body>
+</html>
+<script>
+$(document).ready(function() {
+
+    var user_id   = localStorage.user_id;
+    var gubun     = localStorage.gubun;
+    var tradecd   = localStorage.tradecd;
+    var wrkcentcd = localStorage.wrkcentcd;
+    var bizno     = localStorage.bizno;
+    var gourl = "";
+
+    if (gubun == "1") {
+        // gourl 설정
+        gourl = "/business/sc/main.html";
+        goURL(gourl);
+    } else if (gubun == "2") {
+        // gourl 설정
+        gourl = "/business/np/main.html";
+        goURL(gourl);
+    }
+            
+    return false;
+
+}); // ready
+
+$( "#btn_login" ).bind ("tap", function( event ) {      
+    if ( chkInput( loginForm ) ) {      
+        var gourl = "";
+        var p_user_id   = $('#user_id').val() ;
+        var p_user_pwd  = $('#user_pwd').val() ;
+        var p_gubun     = $('#gubun').val() ;
+        
+        if(p_gubun==""){
+        	p_gubun ="1";
+        }
+        
+        $.ajax( {
+            type : 'GET' ,
+            url: 'http://210.127.35.20:8080/jsp/login/login.jsp' ,              
+            data : "user_id="+p_user_id +"&user_pwd="+p_user_pwd +"&gubun="+p_gubun,
+            dataType: 'jsonp',  
+            success: function(data) {                   
+                if (data.errCode == "0")
+                {
+                    alert ("반갑습니다. " + data.username + "님");
+                    if (p_gubun == "1") {
+                        // gourl 설정
+                        gourl = "/business/sc/main.html";                       
+                    } else if (p_gubun == "2") {
+                        // gourl 설정
+                        gourl = "/business/np/main.html";                                               
+                    }
+                    
+                    goURL(gourl);
+                }
+                else if  (data.errCode == "1")
+                {
+                    alert ("아이디와 비밀번호가 일치하지 않습니다.") ;
+                }
+
+                localStorage.user_id   = data.userid;
+                localStorage.gubun     = data.gubun;
+                localStorage.tradecd   = data.tradecd;
+                localStorage.wrkcentcd = data.wrkcentcd;
+                localStorage.bizno     = data.bizno;
+
+                return false;
+            },
+            complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+
+
+           },               
+            error: function(e) {
+                alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");                    
+                return false;
+            }
+        } ); // end ajax
+        
+    } // if     chkInput( loginForm )   
+} ); // btn_login tap
+        
+var className = $('#ct').attr('class');
+//$(document).ready(function() {
+    $( "#gubun01" ).bind ("tap" ,'li',  function(  ) {
+        $("#gubun01").removeClass("tab current").addClass("current");
+        $("#gubun02").removeClass("tab current").addClass("tab");
+        $("#gubun").val("1") ;      
+    });
+    $( "#gubun02" ).bind ("tap" ,'li',  function(  ) {
+        $("#gubun01").removeClass("tab current").addClass("tab");
+        $("#gubun02").removeClass("tab current").addClass("current");
+        $("#gubun").val("2") ;      
+    }); 
+//}); // ready  
+/*
+if ( $("#gu02").html( "외주") == "외주" ) {
+alert ( "외주클릭" );
+}
+if ( $("#gu02").html( "자재") == "자재" ) {
+alert ( "자재클릭" );
+}
+$("#gu01").text( "자재") ; 
+$("#gu02").text( "외주") ;         
+*/
+  
+ function chkInput( frm ) {
+    var user_id = frm.user_id.value;
+    var user_pwd = frm.user_pwd.value;  
+    if(user_id == '' ){
+        alert('아이디를 입력하세요');
+        return false;
+    }   
+    if(user_pwd == ''){
+        alert('비밀번호를 입력하세요');
+        return false;
+    }       
+    return true ;
+}
+//로딩 문자 없에기
+$.mobile.loading().hide();
+
+
+</script>
+
+
+

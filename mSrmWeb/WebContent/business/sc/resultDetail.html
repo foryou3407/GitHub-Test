@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+<style type="text/css">
+.tbl_x {  color: #333333; background-color: #D5D5D5; text-align: center; padding-right: 1px; 
+          padding-left: 1px; height: 25px; border-width:1px; font-size:14px; valign:middle;
+          border-color:#454545; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-bottom-style:solid;}
+.tbl   {  background-color: #B1B1B1; padding-top: 1px; padding-right: 1px; ; valign:middle;
+		  padding-bottom: 1px; padding-left: 1px; cellspacing:0;}
+.tbl_bC { color: #333333; background-color: #F9F9F9; text-align: center; 
+          padding-right: 1px; padding-left: 1px; height: 25px;
+          border-width:1px; border-color:#454545; border-top-style:solid; font-size:6px; padding-bottom: 1px; border-top-style:solid;  border-bottom-style:solid; border-right-style:solid;
+          border-left-style:solid;}
+.tbl_bL { color: #333333; background-color: #F9F9F9; text-align: left; 
+          padding-right: 1px; padding-left: 1px; height: 25px;
+          border-width:1px; border-color:#454545; border-top-style:solid; font-size:6px; padding-bottom: 1px; border-top-style:solid;  border-bottom-style:solid; border-right-style:solid;
+          border-left-style:solid;}
+.tbl_xx {  color: #333333; background-color: #B1B1B1; text-align: center; padding-right: 1px; 
+          padding-left: 1px; height: 25px; border-width:1px; font-size:14px; valign:middle;
+          border-color:#454545; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-bottom-style:solid;}
+</style>
+
+<script type="text/javascript">
+   $(document).ready(function() {	   
+	 // 로컬스토리지값 가져오기
+	  var bizno_sub = localStorage.bizno.substring(0, 3)+"-"+localStorage.bizno.substring(3, 5)+"-"+localStorage.bizno.substring(5, 10);
+	  document.getElementById("bizno_sub").innerHTML = bizno_sub;  
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/sc/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/sc/resultDetail.jsp",
+ 			data : "sitecd="+$.getUrlVar("sitecd")+"&chgdgr="+$.getUrlVar("chgdgr")  ,
+ 		    dataType: 'jsonp',
+ 		    success : function(data) { 					// success & error
+				var records   = data.records ; 
+				var req_rows =  data.result;
+				
+				// 배열선언
+				var arr_totalanlrmk				= new Array();
+				var arr_appraisestdt			= new Array();
+				var arr_appraiseeddt			= new Array();
+				var arr_resultanal		    	= new Array();
+				var arr_improvermk 			= new Array();
+				var arr_note 					= new Array();
+				var arr_jobfgcd 				= new Array();
+				var arr_jobfgname 				= new Array();
+				var arr_sitenm 					= new Array();
+				var arr_finishdt 					= new Array();
+
+				var html ='';
+			         html  +=' <tr >';
+			         html  +='	<th class="tbl_x" width="18%" valign="middle">구 분</th>';
+			         html  +='	<th class="tbl_x" width="34%" valign="middle">결과분석</th>';
+			         html  +='	<th class="tbl_x" width="34%" valign="middle">개선사항</th>';
+			         html  +='	<th class="tbl_x" width="14%" valign="middle">완료일자</th>';
+			         html  +='</tr>';
+				
+				
+				
+				
+				var title = "";
+				var gourl = "";
+				
+				var tradecd = localStorage.tradecd;
+				
+
+				
+				
+				
+					// 각 데이터를 배열에 담는다 
+				for (var i = 0 ; i < req_rows.length; i++){
+				    var plist = req_rows[i];
+				    arr_totalanlrmk [i]    	 		   = plist.totalanlrmk  ;
+				    arr_appraisestdt[i]        		   = plist.appraisestdt.substr(0, 4)+"-"+plist.appraisestdt.substr(4, 2)+"-"+plist.appraisestdt.substr(6, 2) ;
+				    arr_appraiseeddt[i]        		   = plist.appraiseeddt.substr(0, 4)+"-"+plist.appraiseeddt.substr(4, 2)+"-"+plist.appraiseeddt.substr(6, 2) ;
+				    arr_resultanal [i]  		       	   = plist.resultanal  ;
+				    arr_improvermk [i]    			   = plist.improvermk  ;
+				    arr_note[i]    	 		   		   = plist.note ;
+				    arr_jobfgcd[i]    	 		   	   = plist.jobfgcd ;
+				    arr_jobfgname[i]    	 		   = plist.jobfgname ;
+				    arr_sitenm[i]    	 		   		   = plist.sitenm ;
+				    arr_finishdt[i]    	 		   		   = plist.finishdt;
+				    
+				    if(arr_finishdt[i]==null){
+				    	arr_finishdt[i] =''; 
+				    }else{
+				    	arr_finishdt[i]= plist.finishdt.substr(0, 4)+"<br>"+plist.finishdt.substr(4, 2)+"-"+plist.finishdt.substr(6, 2) ;
+				    }
+				    
+				    if(arr_resultanal[i]==null){
+				    	arr_resultanal[i] =''; 
+				    }
+				    if(arr_improvermk[i]==null){
+				    	arr_improvermk[i] =''; 
+				    }
+				    
+					//현장, 차수, 평가기간, 종합의견을 html id 값으로 넣어줌
+					$("#view_sitenm").html( arr_sitenm[i]   )  ;
+					$("#view_chgdgr").html($.getUrlVar("chgdgr") )  ;
+					$("#view_appraisestdt").html( arr_appraisestdt[i]   )  ;
+					$("#view_appraiseeddt").html( arr_appraiseeddt[i]   )  ;
+					$("#view_totalanlrmk").html( arr_totalanlrmk[i]   )  ;
+				    
+
+				        html += '<tr><td class="tbl_bC"  valign="middle">'+ arr_jobfgname[i]+'</td>';
+				        html += '<td class="tbl_bC"  valign="middle">'+arr_resultanal [i]+'</td>';
+				        html += '<td class="tbl_bC"  valign="middle">'+arr_improvermk [i]+'</td>';
+				        html += '<td class="tbl_bC"  valign="middle">'+arr_finishdt[i]+'</td></tr>';
+				       
+				}
+			//for end		
+			
+
+                $('#resultDetail').append((html))
+                      
+                $('#resultDetail').listview('refresh');
+
+			/*	
+			$("#sitedescList").html(html);
+			$('#sitedescList').listview('refresh');
+			*/	
+			
+		},
+		complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		},			    
+        error: function(e) {
+        	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	return false;
+		}
+	} ); // end ajax			
+    			
+//-------------------------------------------------------------------
+
+
+   }); // ready   
+   
+</script>
+
+
+</head>
+<body>
+
+<div data-role="page" id="page_notice"  > 
+	<!-- header  -->
+	<div data-role="header"  data-position="fixed">		
+		<div id="mob_sub">		
+			<div id = "mob_header" >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">결과분석 및 개선</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+	
+
+		
+	<!-- content -->
+
+ 	<div data-role="content">
+ 		<div>
+            <b><li><lu><span>· 현&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;장 : </span><span id="view_sitenm"></span></lu><li>
+            <li><lu><span>· 차&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;수 : </span><span id="view_chgdgr"></span></lu><li>
+            <li><lu><span>· 평가기간 : </span><span id="view_appraisestdt"></span> ~ <span id="view_appraiseeddt"></span></lu></li></b></b><br>
+        </div>
+        
+ 		<div>
+	    	<section >
+		    	<div>
+		    		<b><lu>· 위험성 평가</lu></b><br>
+					<table class="tbl" id=view_table >
+						<lu id="resultDetail" data-role="listview"></lu>
+					</table>
+	    	<br>
+	    			<b><lu>· 위험성 평가 종합의견</lu></b><br><br>
+	    			<lu id="view_totalanlrmk" ></lu>
+	    		</div>
+	    	</section>
+		</div>
+ 		
+  	</div>
+	<!-- content -->
+		
+	<!-- footer -->	  
+	<nav id="my-menu">
+     <ul>
+       <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+       <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+       <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+       <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+       <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+       <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+       <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+       <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+       <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+       <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+       <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+  </ul>
+  </nav>
+	 <!-- footer -->
+	
+</div>
+<!-- /page -->
+
+</body>
+</html>

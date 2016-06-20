@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+<!--  JQuery-UI-Map 태그 -->
+<script type="text/javascript" charset="utf-8" src="http://maps.google.com/maps/api/js?sensor=true" ></script>
+<script type="text/javascript" charset="utf-8" src="/js/jquery.ui.map.full.min.js" ></script>
+<script type="text/javascript" charset="utf-8" src="/js/jquery.ui.map.extensions.js" ></script>
+
+
+<script type="text/javascript">
+   $(document).ready(function() {	   
+	   // 로컬스토리지값 가져오기
+	    var bizno_sub = localStorage.bizno.substring(0, 3)+"-"+localStorage.bizno.substring(3, 5)+"-"+localStorage.bizno.substring(5, 10);
+	    document.getElementById("bizno_sub").innerHTML = bizno_sub;
+	   
+	   // 네비게이션 메뉴
+		$("#my-menu").mmenu({
+	         // options
+			 slidingSubmenus: false   
+	  	});	   
+     	var API = $("#my-menu").data( "mmenu" );      
+     	$("#my-button").click(function() {
+			API.open();
+     	});
+     	$("#my-button").click(function() {
+			API.close();
+		});       
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/sc/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	   
+	   
+	   
+	   
+	//-------------------------------------------------------------------
+	// 파라미터 가져오기
+	//-------------------------------------------------------------------
+	   var lat      = $.getUrlVar("lat");    //위도
+	   var lng     = $.getUrlVar("lng");    //경도
+	   var addr   = $.getUrlVar("addr");  //주소
+	   
+	   $("#view_addr").html( addr  )  ;
+ 	  
+	   //지도 보기 설정
+	   var markerBlue="http://www.google.com/intl/en_us/mapfiles/ms/icons/blue-dot.png"
+ 	   var StartLatLng = new google.maps.LatLng(lat, lng);                           //지도좌표
+ 	   $('#map_canvas').gmap({"center":StartLatLng, "zoom":16});                    //지도위치
+ 	   $('#map_canvas').gmap("addMarker",{"position":StartLatLng});		          //마커위치
+ 	   
+ 
+ 	   /*   마커 클릭시 주소 표시
+ 			$('#map_canvas').gmap('addMarker', {'position': StartLatLng}).click(function() {
+ 				$('#map_canvas').gmap('openInfoWindow', {'content': addr}, this);
+ 			});
+ 
+ 		*/	   
+ 	   
+
+   }); // ready
+   		
+
+   
+   
+   
+</script>
+<style type="text/css">
+	.map_style{
+		padding: 0px;
+		height : 80%;
+		width: 100%;
+	}
+</style>
+
+</head>
+
+ <body>
+				 <div data-role="page" id ="page" class="map_style">
+
+				 	
+				 	<div data-role="header"  data-position="fixed">		
+						<div id="mob_sub">		
+							<div id = "mob_header" >		                	
+								<div id ="my-button" class="sch_hw" ></div>		        	
+		            				<h1 class="">현장설명</h1>
+		           				<div id ="btn_home" class="home_hw" ></div>
+	        				</div>
+       					 </div>
+        			</div>
+				 	
+
+            		<div data-role="content" class="map_style">
+            			<div id="map_canvas" class="map_style"></div>
+            		</div>          		
+            	</div>
+            	
+            	<!-- footer -->	 
+					<nav id="my-menu">
+					  <ul>
+					    <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+					    <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+					    <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+					    <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+					    <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+					    <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+					    <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+					    <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+					    <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+					    <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+					    <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+					  </ul>
+					</nav>
+            		
+            		
+</body>
+</html>
+
+

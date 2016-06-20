@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+<style type="text/css">
+.tbl_x {  color: #333333; background-color: #D5D5D5; text-align: center; padding-right: 1px; 
+          padding-left: 1px; height: 25px; border-width:1px; font-size:14px; valign:middle;
+          border-color:#454545; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-bottom-style:solid;}
+.tbl   {  background-color: #B1B1B1; padding-top: 1px; padding-right: 1px; ; valign:middle;
+		  padding-bottom: 1px; padding-left: 1px; cellspacing:0;}
+.tbl_bC { color: #333333; background-color: #F9F9F9; text-align: center; 
+          padding-right: 1px; padding-left: 1px; height: 25px;
+          border-width:1px; border-color:#454545; border-top-style:solid; font-size:6px; padding-bottom: 1px; border-top-style:solid;  border-bottom-style:solid; border-right-style:solid;
+          border-left-style:solid;}
+.tbl_bL { color: #333333; background-color: #F9F9F9; text-align: left; 
+          padding-right: 1px; padding-left: 1px; height: 25px;
+          border-width:1px; border-color:#454545; border-top-style:solid; font-size:6px; padding-bottom: 1px; border-top-style:solid;  border-bottom-style:solid; border-right-style:solid;
+          border-left-style:solid;}
+.tbl_xx {  color: #333333; background-color: #B1B1B1; text-align: center; padding-right: 1px; 
+          padding-left: 1px; height: 25px; border-width:1px; font-size:14px; valign:middle;
+          border-color:#454545; border-top-style:solid; border-left-style:solid; border-right-style:solid; border-bottom-style:solid;}
+</style>
+
+<script type="text/javascript">
+   $(document).ready(function() {	   
+	// 로컬스토리지값 가져오기
+	 var bizno_sub = localStorage.bizno.substring(0, 3)+"-"+localStorage.bizno.substring(3, 5)+"-"+localStorage.bizno.substring(5, 10);
+	 document.getElementById("bizno_sub").innerHTML = bizno_sub;
+	//-------------------------------------------------------------------
+	// 네비게이션 메뉴
+	//-------------------------------------------------------------------	   
+		 $("#my-menu").mmenu({
+         // options
+			 slidingSubmenus: false
+		});   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});    
+		// 홈버튼		
+      	$( "#btn_home" ).bind ("tap", function( event ) {
+			gourl = "/business/sc/main.html";  ;
+			goURL(gourl);
+      	} ); // btn_home tap
+	
+      	
+//-------------------------------------------------------------------
+   	$.ajax({
+   			type : 'GET' ,
+ 			url : "http://210.127.35.20:8080/jsp/sc/corectorderDetail.jsp",
+ 			data : "tradecd="+$.getUrlVar("tradecd")+"&sitecd="+$.getUrlVar("sitecd")+"&trgtjobtycd="+$.getUrlVar("trgtjobtycd")+"&ctrlno="+$.getUrlVar("ctrlno")+"&corectordersq="+$.getUrlVar("corectordersq")+"&chgdgr="+$.getUrlVar("chgdgr")  ,
+ 		    dataType: 'jsonp',
+ 		    success : function(data) { 					// success & error
+				var records   = data.records ; 
+				var req_rows =  data.corectorder;
+				
+				// 배열선언
+				var arr_chgdgr 				= new Array();
+				var arr_sitecd				= new Array();
+				var arr_sitenm 				= new Array();
+				var arr_tradecd			    = new Array();
+				var arr_trgtjobtycd 		= new Array();
+				var arr_trgtjobtynm 		= new Array();
+				var arr_ctrlno 				= new Array();
+				var arr_corectordersq 	= new Array();
+				var arr_title 					= new Array();
+				var arr_issuedt 				= new Array();
+				var arr_handlngdt 			= new Array();
+				var arr_progstt 				= new Array();
+				var arr_progsttmn 			= new Array();
+				var arr_indicactsq 			= new Array();
+				var arr_indicitm 			= new Array();
+				var arr_indicpicid 			= new Array();
+				var arr_indicpicrmk 		= new Array();
+				var arr_indicattachid 		= new Array();
+				var arr_actionitm 			= new Array();
+				var arr_actionpicid 		= new Array();
+				var arr_actionpicrmk 		= new Array();
+				var arr_actionattachid 		= new Array();
+				var arr_filepath 			    = new Array();
+				var arr_attfilenm 			= new Array();
+				var arr_savefilenm 			= new Array();
+				var arr_afilepath 			= new Array();
+				var arr_asavefilenm 		= new Array();
+
+
+				var html ='';
+				
+
+				var title = "";
+				var gourl = "";
+				
+				var tradecd = localStorage.tradecd;
+						
+					// 각 데이터를 배열에 담는다 
+				for (var i = 0 ; i < req_rows.length; i++){
+				    var plist = req_rows[i];
+				    arr_chgdgr [i]    	 		   = plist.chgdgr  ;
+				    arr_sitecd [i]    	 		  	   = plist.sitecd  ;
+				    arr_sitenm [i]    	 		   = plist.sitenm  ;
+				    arr_tradecd [i]    	 		   = plist.tradecd  ;
+				    arr_trgtjobtycd [i]    	 	   = plist.trgtjobtycd  ;
+				    arr_trgtjobtynm [i]    	 	   = plist.trgtjobtynm  ;
+				    arr_ctrlno [i]    	 		 	   = plist.ctrlno  ;
+				    arr_corectordersq [i]    	   = plist.corectordersq  ;
+				    arr_title [i]    	 		  	   = plist.title  ;
+				    arr_issuedt [i]    	 		   = plist.issuedt.substr(0, 4)+"-"+plist.issuedt.substr(4, 2)+"-"+plist.issuedt.substr(6, 2) ;
+				    arr_handlngdt [i]    	 	   = plist.handlngdt.substr(0, 4)+"-"+plist.handlngdt.substr(4, 2)+"-"+plist.handlngdt.substr(6, 2) ;
+				    arr_progstt [i]    	 		   = plist.progstt  ;
+				    arr_progsttmn [i]    	 	  = plist.progsttmn  ;
+				    arr_indicactsq [i]    	 	  = plist.indicactsq  ;
+				    arr_indicitm [i]    	 		  = plist.indicitm  ;
+				    arr_indicpicid [i]    	 	  	  = plist.indicpicid  ;
+				    arr_indicpicrmk [i]    	 	  = plist.indicpicrmk  ;
+				    arr_indicattachid [i]    	 	  = plist.indicattachid  ;
+				    arr_actionitm [i]    	 	  	  = plist.actionitm  ;
+				    arr_actionpicid [i]    	 	  = plist.actionpicid  ;
+				    arr_actionpicrmk [i]    	 	  = plist.actionpicrmk  ;
+				    arr_actionattachid [i]    	  = plist.actionattachid  ;
+				    arr_filepath [i]    	 	  	  = plist.filepath  ;
+				    arr_attfilenm [i]    	 	  	  = plist.attfilenm  ;
+				    arr_savefilenm [i]    	 	  = plist.savefilenm  ;
+				    arr_afilepath [i]    	 	   = plist.afilepath  ;
+				    arr_asavefilenm [i]    	 	   = plist.asavefilenm  ;
+
+					//제목, 발행일자, 조치기한, 관리번호를 html id 값으로 넣어줌
+					$("#view_title").html( arr_title [i]  )  ;
+					$("#view_issuedt").html(arr_issuedt [i] )  ;
+					$("#view_handlngdt").html( arr_handlngdt[i]   )  ;
+					$("#view_ctrlno").html( arr_ctrlno[i]   )  ;
+					
+					//저장, 확정 버튼 기능에 필요한 데이터를 input tag id 값으로 넣어줌
+					document.getElementById("cnt_indicactsq").value= arr_indicactsq [i] ;
+					
+					//시정지시가 확정 상태일때, 저장/확정 버튼 안보이게 수정
+					if( arr_progstt [i]  == '04' ){
+    					$("#button").hide();
+					}
+
+				    
+					    html += '<table class="tbl" id=view_table >';
+				        html += '<tr><td class="tbl_x" width="25%"  valign="middle">지적사항 '+arr_indicactsq [i]+'</td>';
+				        html += '<td class="tbl_bL" width="65%" valign="middle">'+arr_indicitm[i]+'</td></tr>';
+				        html += '<tr><td class="tbl_x" width="25%"  valign="middle">지적사진</td>';
+				        html += '<td class="tbl_bC" width="65%" valign="middle"><img src="http://210.127.35.20:8080/mo/rs/'+arr_filepath [i]+'/'+arr_savefilenm [i]+'" width="60%" ></td></tr>';
+				        html += '<tr><td class="tbl_x" width="25%"  valign="middle">사진설명</td>';
+				        html += '<td class="tbl_bL" width="65%" valign="middle">'+arr_indicpicrmk [i]+'</td></tr>';
+
+				        
+				        html += '<tr><td class="tbl_xx" width="25%"  valign="middle">조치사항 '+arr_indicactsq [i]+'</td>';
+				        html += '<td class="tbl_bL" width="65%" valign="middle"><input type="text"  name="actionitm'+arr_indicactsq [i]+'" id="actionitm'+arr_indicactsq [i]+'"  maxlength="300" value="'+arr_actionitm [i]+'" style="width:95%; border: 1px solid #999; border-color:#B1B1B1;"  ></td></tr>';
+				        html += '<tr><td class="tbl_xx" width="25%"  valign="middle">조치사진 +</td>';
+				        html += '<td class="tbl_bC" width="65%" valign="middle"><img src="http://210.127.35.20:8080/mo/rs/'+arr_afilepath [i]+'/'+arr_asavefilenm [i]+'" width="60%"></td></tr>';
+				        html += '<tr><td class="tbl_xx" width="25%"  valign="middle">사진설명</td>';
+				        html += '<td class="tbl_bL" width="65%" valign="middle"><input type="text"  name="actionpicrmk'+arr_indicactsq [i]+'" id="actionpicrmk'+arr_indicactsq [i]+'"  maxlength="60" value="'+arr_actionpicrmk [i]+'" style="width:95%; border: 1px solid #999;"  ></td></tr>';
+				        html += '</table><br>';
+				       
+				}
+			//for end		
+			
+
+                $('#corectorderDetail').append((html))
+                      
+                $('#corectorderDetail').listview('refresh');
+
+			/*	
+			$("#sitedescList").html(html);
+			$('#sitedescList').listview('refresh');
+			*/	
+			
+		},
+		complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		},			    
+        error: function(e) {
+        	alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");			    	 
+        	return false;
+		}
+	} ); // end ajax			
+    			
+//-------------------------------------------------------------------
+
+
+   }); // ready   
+   
+</script>
+
+
+</head>
+<body>
+
+<div data-role="page" id="page_notice"  > 
+	<!-- header  -->
+	<div data-role="header"  data-position="fixed">		
+		<div id="mob_sub">		
+			<div id = "mob_header" >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">시정조치</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->    	
+	
+
+		
+	<!-- content -->
+
+ 	<div data-role="content">
+ 	 <section>
+ 		
+ 			<b><lu>· 일반사항 </lu></b>
+ 			<lu>
+ 			<table class="tbl" >
+ 				     <tr >
+			         	<th class="tbl_x" width="34%" valign="middle" >제목</th>
+			         	<th class="tbl_x" width="22%" valign="middle">발행일자</th>
+			         	<th class="tbl_x" width="22%" valign="middle">조치기한</th>
+			         	<th class="tbl_x" width="22%" valign="middle">관리번호</th>
+			         </tr>
+			         <tr >
+			         	<th class="tbl_bC " valign="middle" ><p id="view_title"></p></th>
+			         	<th class="tbl_bC"  valign="middle"><p id="view_issuedt"></p></th>
+			         	<th class="tbl_bC" valign="middle"><p id="view_handlngdt"></p></th>
+			         	<th class="tbl_bC" valign="middle"><p id="view_ctrlno"></p></th>
+			         </tr>
+			   </table>
+			 </lu><br>
+	  	     
+		   <b><lu>· 지적사항 및 조치사항</lu></b>
+				<lu id="corectorderDetail" data-role="listview"></lu>
+       
+        		 
+        	<div class="ui-grid-a" id="button">			
+				<div class="ui-block-a">
+					<input type="button"  date-theme="b" value="저   장"  id="btn_save" class="btn_save" width="40%">
+				<!--  	<input type="submit" data-theme="b"  value="입력하기">  -->
+				</div>			
+				<div class="ui-block-b">
+					<input type="button"  date-theme="b" value="확   정"  id="btn_confirm" class="btn_confirm" width="40%">
+					<input type="hidden"  id="cnt_indicactsq" value="">
+			  <!-- <a href="javascript:goMain('A')"  data-theme="b"  data-role="button">cancel</a> -->
+				</div>	
+			</div>
+	
+	    	</section>
+  	</div>
+	<!-- content -->
+		
+	<!-- footer -->	  
+	<nav id="my-menu">
+     <ul>
+       <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+       <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+       <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+       <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+       <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+       <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+       <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+       <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+       <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+       <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+       <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+  </ul>
+  </nav>
+	 <!-- footer -->
+	
+</div>
+<!-- /page -->
+
+</body>
+</html>
+
+<script>
+
+
+$(function() {
+	$("#btn_save").click(function(){	
+		var cnt_indicactsq = $('#cnt_indicactsq').val() ; //지적사항 갯수
+		 		   	
+			var gorul = "";		
+		
+			var p_indicitm 		="";	  //조치사항
+			var p_indicpicrmk  ="";     //사진설명
+			var p_indicactsq    ="";     //지적사항 순번
+			
+			
+			for(var i = 0 ; i < cnt_indicactsq; i++){  
+			io = i+1
+			
+			var a;
+			var b;
+			a = "actionitm"+io; 
+			b = "actionpicrmk"+io; 
+			
+			p_actionitm 	   =   $('#'+a).val() ;			         //조치사항
+			p_actionpicrmk  =   $('#'+b).val() ;   				//사진설명
+			p_indicactsq    =    i+1;							    //지적사항 순번
+			
+			$.ajax( {
+			    type : 'GET' ,
+			    url: 'http://210.127.35.20:8080/jsp/sc/corectorderDetailSave.jsp' ,			    
+				data :  "tradecd="+$.getUrlVar("tradecd")+"&sitecd="+$.getUrlVar("sitecd")+"&trgtjobtycd="+$.getUrlVar("trgtjobtycd")+"&ctrlno="+$.getUrlVar("ctrlno")+"&corectordersq="+$.getUrlVar("corectordersq")+"&chgdgr="+$.getUrlVar("chgdgr")+"&actionitm="+p_actionitm+"&actionpicrmk="+p_actionpicrmk+"&indicactsq="+p_indicactsq  ,
+			    dataType: 'jsonp',	
+			    success: function(data) {			    	
+			    	if (data.errCode == "1")
+			    	{
+
+			    	}
+			    	else if  (data.errCode == "0")
+			    	{
+			    		alert ("저장도중 오류가 발생하였습니다. 관리자에게 문의하세요") ;
+			    	}
+			    	return false;
+			    },
+			    complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		       },			    
+			    error: function(e) {
+			    	alert ("서버연결중 오류가 발생하였습니다.  관리자에게 문의하세요.");			    	 
+			    	return false;
+			    }
+			} ); // end ajax
+			
+			} // end for
+    		alert ("저장되었습니다.") ;
+    	//	gourl =  "/business/sc/corectorderDetail.html?tradecd="+$.getUrlVar("tradecd")+"&sitecd="+$.getUrlVar("sitecd")+"&trgtjobtycd="+$.getUrlVar("trgtjobtycd")+"&ctrlno="+$.getUrlVar("ctrlno")+"&corectordersq="+$.getUrlVar("corectordersq")+"&chgdgr="+$.getUrlVar("chgdgr")  ;		    			
+    	//	goURL(gourl);
+			
+			
+	}) //#btn_save click
+}) //function
+
+$(function() {
+	$("#btn_confirm").click(function(){	
+					   	
+			var p_user_id = localStorage.user_id;
+			var gorul = "";		
+			
+			$.ajax( {
+			    type : 'GET' ,
+			    url: 'http://210.127.35.20:8080/jsp/sc/corectorderDetailConfirm.jsp' ,			    
+				data :  "tradecd="+$.getUrlVar("tradecd")+"&sitecd="+$.getUrlVar("sitecd")+"&trgtjobtycd="+$.getUrlVar("trgtjobtycd")+"&ctrlno="+$.getUrlVar("ctrlno")+"&corectordersq="+$.getUrlVar("corectordersq")+"&chgdgr="+$.getUrlVar("chgdgr")+"&user_id="+p_user_id  ,
+			    dataType: 'jsonp',	
+			    success: function(data) {			    	
+			    	if (data.errCode == "1")
+			    	{
+			    		alert ("확정되었습니다.") ;
+			    		$("#button").hide();
+			    	//	gourl =  "/business/sc/corectorderDetail.html?tradecd="+$.getUrlVar("tradecd")+"&sitecd="+$.getUrlVar("sitecd")+"&trgtjobtycd="+$.getUrlVar("trgtjobtycd")+"&ctrlno="+$.getUrlVar("ctrlno")+"&corectordersq="+$.getUrlVar("corectordersq")+"&chgdgr="+$.getUrlVar("chgdgr")  ;		    			
+			    	//	goURL(gourl);
+			    	}
+			    	else if  (data.errCode == "0")
+			    	{
+			    		alert ("저장도중 오류가 발생하였습니다. 관리자에게 문의하세요") ;
+			    	}
+			    	return false;
+			    },
+			    complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+		       },			    
+			    error: function(e) {
+			    	alert ("서버연결중 오류가 발생하였습니다.  관리자에게 문의하세요.");			    	 
+			    	return false;
+			    }
+			} ); // end ajax	
+
+			
+			
+	}) //#btn_save click
+}) //function
+
+
+</script>
+

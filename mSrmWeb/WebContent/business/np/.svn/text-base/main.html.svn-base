@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" charset="utf-8" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+
+<script type="text/javascript">
+   $(document).ready(function() {
+
+	    var user_id1 = localStorage.user_id.substring(0, 3);
+	    var user_id2 = localStorage.user_id.substring(3, 5);
+	    var user_id3 = localStorage.user_id.substring(5, 10);
+	    var user_id = user_id1+"-"+user_id2+"-"+user_id3;
+	    document.getElementById("user_id").innerHTML = user_id;
+
+	    // 네비게이션 메뉴
+		$("#my-menu").mmenu({
+	         // options
+			 slidingSubmenus: false   
+	  	});	   
+      	var API = $("#my-menu").data( "mmenu" );      
+      	$("#my-button").click(function() {
+			API.open();
+      	});
+      	$("#my-button").click(function() {
+			API.close();
+		});
+      	
+        //-------------------------------------------------------------------
+        $.ajax({
+                type : 'GET' ,
+                url : "http://210.127.35.20:8080/jsp/np/mainCount.jsp",
+                data : "tradecd="+ localStorage.tradecd + "&wrkcentcd="+ localStorage.wrkcentcd  ,
+                dataType : "jsonp",
+                jsonp : "callback",  
+                success : function(data) {                  // success & error
+                    var sitedesc = data.sitedesc; 
+                    var bid = data.bid;
+                    var contract = data.contract;
+                                    
+                    $("#sitedescCount").html(sitedesc);         
+                    $("#bidCount").html(bid);
+                    $("#contractCount").html(contract);
+                    
+                },
+                complete : function(data) {  // 통신이 실패했어도 완료가 되었을 때 이 함수를 타게 된다.
+                },
+                    error: function(e) {
+                    alert ("서버연결중 오류가 발생하였습니다.관리자에게 문의하세요.");                    
+                    return false;
+                }
+        } ); // end ajax
+        //-------------------------------------------------------------------
+   }); // ready
+</script>
+</head>
+
+<body>
+
+<div data-role="page" id="mob_body"  > 
+
+<!-- header  -->
+<div data-role="header" >		
+	  <div id="mob_header">
+	    <section>
+	      <div id ="my-button" class="sch_hw" ></div>
+	      <h1 class="">
+	        <a href="#" class="">
+	          <img src="/images/logo.png" alt="동부건설">
+	        </a>
+	      </h1>
+	    </section>
+	  </div>
+</div>
+<!-- header -->   
+
+<!-- content -->
+<div data-role="content"  id="ct_1">
+  	<ul class="secion_menu">
+    	<li>
+            <a href="/business/np/sitedescList.html" target="_self">
+            <dl>
+                <dt>현장설명</dt>
+                <dd> <img src="/images/menu_001.png"></dd>
+                <em class="t_count" id="sitedescCount"></em>
+            </dl>
+            </a>
+        </li>
+        <li>
+            <a href="/business/np/bidList.html" target="_self">
+            <dl>
+                <dt>전자입찰</dt>
+                <dd> <img src="/images/menu_002.png"></dd>
+                <em class="t_count" id="bidCount"></em>
+            </dl>
+            </a>
+        </li>
+        <li>
+            <a href="/business/np/contractList.html" target="_self">
+            <dl>
+                <dt>전자계약</dt>
+                <dd> <img src="/images/menu_004.png"></dd>
+                <em class="t_count" id="contractCount"></em>
+            </dl>
+            </a>
+        </li>
+        <li>
+            <a href="/business/np/manageList.html" target="_self">
+            <dl>
+                <dt>자재검수</dt>
+                <dd> <img src="/images/menu_003.png"></dd>
+            </dl>
+            </a>
+        </li>
+    </ul>
+</div>
+<!-- content -->
+
+
+
+<!-- footer -->	 
+<nav id="my-menu">
+  <ul>
+    <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="user_id"></b></span></li><br>
+    <li><a href="/business/np/noticeList.html" target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+    <li><a href="/business/np/chargeInfo.html" target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>
+    <li><a href="/business/np/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+    <li><a href="/business/np/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+    <li><a href="/business/np/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+    <li><a href="/business/np/manageList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>자재검수</b></a></li><br>
+    <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>
+    <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="10%"> 로그아웃</a></li>
+  </ul>
+</nav>
+
+
+</div> <!-- //mob_body -->
+
+
+</body>
+</html>

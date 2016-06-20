@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<link rel="stylesheet" type="text/css" href="css/basic.css">
+<link rel="stylesheet" type="text/css" href="css/layout.css">
+</head>
+
+ <body id="sub">
+ <div id="wrap">
+  <div class="u_skip"><a href="#ct">본문 바로가기</a></div>
+ <!-- Header -->
+  <div id="header">
+        <section>
+            <button id="schn_btn" type="button" class="sch_hw">
+            	확장영역 열기
+            </button>
+            <h1 class="">
+                <a href="#" class="">전자계약
+                </a>
+            </h1>
+            <button id="schn_btn" type="button" class="home_hw">
+            	확장영역 열기
+            </button>
+        </section>
+    </div>
+ <!-- Header //-->
+  
+  <!-- Main -->
+  <div id="ct">
+  
+    
+    <!-- Content -->
+    <div class="btn_wrap">
+        <div class="btn_back"><img src="./images/btn_back.png"></div>
+    </div>
+    <section class="section_content">
+    	<div class="veiw">
+        	<ul>
+            	<li><span>계약건명 :</span>보일러 설치공사</li>
+                <li><span>계약일자 :</span>2015/04/27</li>
+                <li><span>계약금액 :</span>213,510,000</li>
+                <li><span>현장명 :</span>대구테크노A-7BL아파트
+                	<ul>
+                        <li>대구시 달성군 유가면 봉리 589-9</li>
+                        <li>㈜동부건설<img src="./images/ico_map.png"></li>
+                    </ul>
+                </li>
+                <li><span>대금지급조건 :</span>어음수시발행(90일)</li>
+                <li><span>인도조건 :</span>설치,시운전도</li>
+                <li><span>Buy Back 조건 :</span>해당없음</li>
+                <li><span>선급금 조건 :</span>해당없음</li>
+                <li><span>제증권 :</span>
+                	<ul>
+                        <li><input type="checkbox">계약이행<input type="checkbox">근재보험<input type="checkbox">선급금이행<input type="checkbox">하자이행</li>
+                    </ul>
+                </li>
+            </ul>
+            
+        </div>
+        
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Main //-->  
+</div>
+</body>
+</html>

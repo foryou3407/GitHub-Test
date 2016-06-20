@@ -1,0 +1,229 @@
+@charset "utf-8";
+/* CSS Document */
+.u_hc, .u_skip, .u_vc {overflow: hidden; position: absolute; width: 1px; height: 1px; font-size: 1px; line-height: 1px; text-indent: 4px;}
+body {background:url(/images/bg.jpg) 0 100% no-repeat; background-size:cover; width:100%; height:100%}
+#ct {padding : 15% 7%}
+#ct_1 {padding : 20% 7%}
+
+/* Header */
+#header { position:relative; box-shadow: 2px 4px 4px #ddd; background-color:#FFF; text-align: center; padding: 5%;}
+#header h1 {width: 100%; text-align: center;}
+#header h1 img { width:40%}
+.sch_hw {width: 8%; height:33%; min-height:26px; padding: 0; border: 0; background:url(/images/ico_menu.png) 0 0 no-repeat; display:inline-block; background-size:contain; text-indent:-999px; position: absolute; left: 5%; top: 35%;}
+.sprh   { background:url(/images/icon.png) 0 0 no-repeat; display:inline-block}
+.sprh_sch_ham {width: 50px; height: 45px; background-position: 0 0; background-size: cover; font-size:0; color:transparent; text-indent:-999px}
+.home_hw {width: 8%; height:33%; min-height:26px; padding: 0; border: 0; background:url(/images/ico_home_w.png) 0 0 no-repeat; display:inline-block; background-size:contain; text-indent:-999px; position: absolute; right: 4%; top: 32%;}
+
+
+
+/* mob_body */
+#mob_body {background:url(/images/bg.jpg) 0 100% no-repeat; background-size:cover; width:100%; height:100%}
+
+
+
+/* mob_Header */
+#mob_header { position:relative; box-shadow: 2px 4px 4px #ddd; background-color:#FFF; text-align: center; padding: 5%;}
+#mob_header h1 {width: 100%; text-align: center;}
+#mob_header h1 img { width:40%}
+.sch_hw {width: 8%; height:33%; min-height:26px; padding: 0; border: 0; background:url(/images/ico_menu.png) 0 0 no-repeat; display:inline-block; background-size:contain; text-indent:-999px; position: absolute; left: 5%; top: 35%;}
+.sprh   { background:url(/images/icon.png) 0 0 no-repeat; display:inline-block}
+.sprh_sch_ham {width: 50px; height: 45px; background-position: 0 0; background-size: cover; font-size:0; color:transparent; text-indent:-999px}
+.home_hw {width: 8%; height:33%; min-height:26px; padding: 0; border: 0; background:url(/images/ico_home_w.png) 0 0 no-repeat; display:inline-block; background-size:contain; text-indent:-999px; position: absolute; right: 4%; top: 32%;}
+
+
+
+/* Font */
+h1 {font-size:140%}
+h2 {}
+h3 {}
+h4 {}
+
+/** Main **/
+/* Menu */
+.secion_menu em { background-color:#F00;   position: absolute; color: #FFF; font-size: 90%; padding: 3%; top: 0; right: 0; border-radius: 4px; box-shadow: -1px 1px 4px #666;}
+.secion_menu li { float:left; width: 29.3%; margin: 5% 2%}
+.secion_menu dl { position:relative;}
+.secion_menu dt { position: absolute; bottom:0; width: 100%; text-align: center; font-weight:600 }
+.secion_menu dd {padding: 0 0 18% 0;}
+.secion_menu dd img { width:100%}
+
+
+/* Login */
+.login_tab { border-bottom: 2px solid #137c50; overflow:hidden}
+.login_tab h1 { float:left; padding: 10px 0 0 0}
+.login_tab ul, .login_tab a {color:#FFF}
+.login_tab ul { position:relative; float:right; }
+.login_tab li { float:left}
+.login_tab dt, .login_tab dd { float:left; margin: 10px;}
+.login_tab .current dl { background-color:#2eb690}
+.login_tab dd { background:url(/images/tab_arr.png) 50% 50% no-repeat; background-size:contain; width:20px; height:60%; text-indent:-9999px}
+.login_tab dl { background-color:#86909d; float: left;}  
+.section_login { margin: 10% 0 0 0}
+.section_login li { background-color:#FFF; margin: 0 0 3% 0; border: 1px solid #ababab}
+.section_login input, .section_login a {}
+.section_login input {padding: 3%; width:100%}
+.section_login .btn_login { background-color:#00a88e; text-align: center; padding: 3% ;color:#FFF ;font-size:120% !important ; }
+.section_login .btn_login a { color:#FFF; font-weight: 600; display:block}
+
+/** Mobile Sub **/
+#mob_sub { background: #FFF}
+/* Mobile Header */
+#mob_sub #mob_header { background:url(/images/bg_sub.jpg) 0 0 no-repeat; background-size:cover ;text-align: center; padding: 5%;}
+#mob_sub #mob_header h1 {font-size:150% !important ;color:#FFF  }
+#mob_sub #mob_header .sch_hw {background:url(/images/ico_menu_w.png) 0 0 no-repeat; background-size: contain }
+#mob_sub .sch_hw {background:url(/images/ico_menu_w.png) 0 0 no-repeat; background-size: contain }
+#mob_sub .home_hw {background:url(/images/ico_home_w.png) 0 0 no-repeat; background-size:contain }
+/* CT */
+#mob_sub #ct {padding : 0}
+
+
+/* Tab */
+.section_tab {}
+.section_tab ul {}
+.section_tab li { float:left; box-shadow: inset 2px -2px 4px #999; background-color:#d9d9d9; width: 42%; text-align: center; padding: 3% 4%; font-weight: 600;}
+.section_tab li a {display:block}
+.section_tab li.current { float:left; background-color:#f1f1f1; box-shadow: none;}
+.tab_content { clear:both; background-color:#f1f1f1; text-align:center; padding: 5%; border-bottom: 1px solid #bbb;}
+.tab_content select { width:45%;}
+
+.section_tab3 {}
+.section_tab3 ul {}
+.section_tab3 li { float:left; box-shadow: inset 2px -2px 4px #999; background-color:#d9d9d9; width: 25.3%; text-align: center; padding: 3% 4%; font-weight: 600;}
+.section_tab3 li a {display:block}
+.section_tab3 li.current { float:left; background-color:#f1f1f1; box-shadow: none;}
+
+/* Section Content */
+.section_content { background-color: #f1f1f1;}
+.section_content div {background-color: #f1f1f1; background:url(/images/list_bg.png) 50% 50% repeat-x;}
+.section_content div dl {border-bottom: 1px solid #bbb; padding: 3% 5%;}
+.section_content div dt { font-weight:600; line-height: 250%;}
+
+/* Section Content - view */
+.section_content div.veiw  { background-color: #f1f1f1; padding: 6% 5% 15% 5%; border:none !important; background:none !important;}
+.section_content div.veiw ul li 	 { font-weight:normal; line-height: 190%; margin-right:1%; }
+.section_content div.veiw ul li span { font-weight:600; line-height: 190%; margin-right:1%; }
+.section_content div.veiw ul li img	 { width:6%; margin:0 1% 0 3%; }
+.section_content div.veiw ul li input[type="checkbox"] { margin:0 1%;}
+
+.btn_wrap { position: absolute; width:97%; text-align:right; margin:6% 0 0 0; }
+.btn_wrap .btn_back { position: relative;}
+.btn_wrap .btn_back img { width:9%;}
+
+/*************************************************************************
+세로보기
+*************************************************************************/
+/* 300 이하 */
+@media screen and (max-width: 320px) and (orientation:portrait) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:95%}
+	em, .section_content dd {font-size:92%}
+	h1 {font-size:90% !important}
+	/* Tab */
+	.login_tab h1 {padding: 5px 0 0 0;}
+	.login_tab dd { width:8px}
+	.login_tab dt, .login_tab dd { margin: 5px}
+	.login_tab dl {height: 26px}
+	.login_tab li:before {height: 26px; width: 10px;}
+	.login_tab li.current:before {width: 25px;}
+}
+
+/* 아이폰 */
+@media screen and (min-width: 320px) and (orientation:portrait) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:100%}
+	em, .section_content dd {font-size:97%}
+	h1 {font-size:105% !important}
+	/* Tab */
+	.login_tab h1 {padding: 5px 0 0 0;}
+	.login_tab dt, .login_tab dd { margin: 6px}
+	.login_tab dl {height: 31px}
+	.login_tab li:before {height: 31px;   width: 12px;}
+	.login_tab li.current:before {width: 31px;}
+}
+
+/* 삼성 갤럭시A,S,U,K 시리즈, 갤럭시S2, LG 옵티머스 Z, Q, 마하, 2X 시리즈, 스카이 베가, 베가 Xpress, 레이서, 베가 X+ 시리즈
+        스카이 시리우스, 스카이 미라크, 스카이 미라크A, 스카이 이자르, SK W 리액션, KT Tech 테이, HTC 디자이어 HD, HTC 디자이어, 넥서스원,MS 옴니아7
+        모토로이, 모토쿼티, 모토 디파이, 엑스페리아 X10 */
+@media screen and (min-width: 320px) and (orientation:portrait) and (-webkit-device-pixel-radio:1.5) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:100%}
+	em, .section_content dd {font-size:97%}
+	h1 {font-size:110% !important}
+	/* Tab */
+	.login_tab dt, .login_tab dd { margin: 6px}
+	.login_tab dl {height: 31px}
+	.login_tab li:before {height: 31px;   width: 12px;}
+	.login_tab li.current:before {width: 31px;}
+}
+
+/* 옵티머스LTE, 갤럭시S2 HD LTE, 갤럭시 넥서스 프라임, 갤럭시노트2, 갤럭시S3, 베가레이서2, 옵티머스 LTE2 */
+@media screen and (min-width: 360px) and (orientation:portrait) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:100%}
+	em, .section_content dd {font-size:97%}
+	h1 {font-size:120% !important}
+	/* Tab */
+	.login_tab dt, .login_tab dd { margin: 7px}
+	.login_tab dl {height: 33px}
+	.login_tab li:before {height: 33px;}
+	.login_tab li.current:before {width: 33px;}
+}
+
+/* 갤럭시 노트 */
+@media screen and (min-width: 400px) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:110%}
+	em, .section_content dd {font-size:105%}
+	h1 {font-size:120% !important}
+	/* Section Menu */
+	.secion_menu dd {padding: 0 0 15% 0;}
+	/* Tab */
+	.login_tab h1 {padding: 8px 0 0 0;}
+	.login_tab dt, .login_tab dd { margin: 8px; font-size: 100%;}
+	.login_tab dl {height: 41px}
+	.login_tab li:before {height: 41px;}
+	.login_tab li.current:before {width: 41px;}
+}
+
+@media screen and (min-width: 620px) {
+	html { -webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:120%}
+	em, .section_content dd {font-size:110%}
+	h1 {font-size:130% !important}
+	body {background-size:cover}
+	/* Section Menu */
+	.secion_menu dd {padding: 0 0 20% 0;}
+	/* Tab */
+	.login_tab dl {height: 41px}
+	.login_tab li:before {height: 41px;}
+	.login_tab li.current:before {width: 41px;}
+}
+
+/* 베가 LTE, 갤럭시탭8.9, 갤럭시탭 10.1, 스프링보드 */
+@media screen and (min-width: 800px) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+	body,input,select,textarea,button, a, dt, dd, li {font-size:120%}
+	em, .section_content dd {font-size:110%}
+	h1 {font-size:140% !important }
+	/* Header */
+	#sub #header h1 {font-size:180% !important}
+	/* Tab */
+	.login_tab dl {height: 47px}
+	.login_tab li:before {height: 47px;}
+	.login_tab li.current:before {width: 47px;}
+}
+
+
+/*************************************************************************
+가로보기
+*************************************************************************/
+
+/* 아이폰 */
+@media screen and (min-width: 480px) and (orientation:landscape) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto;}
+}
+
+/* 옵티머스LTE, 갤럭시S2 HD LTE, 갤럭시 넥서스 프라임, 갤럭시노트2, 갤럭시S3, 베가레이서2, 옵티머스 LTE2, 갤럭시 노트 */
+@media screen and (min-width: 640px) {
+	html {-webkit-text-size-adjust: auto; -ms-text-size-adjust: auto; }
+}

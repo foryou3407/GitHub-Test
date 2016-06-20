@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/jquery.mobile-1.4.5.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basic.css">
+<link rel="stylesheet" type="text/css" href="/css/layout.css">
+<link rel="stylesheet" type="text/css" href="/css/jquery.mmenu.css" /><!-- 2015.06.30 download -->
+<!-- JS -->
+<script type="text/javascript" src="/js/jquery-2.1.4.js"></script>
+<script type="text/javascript" src="/js/jquery.mobile-1.4.5.js"></script>
+<script type="text/javascript" src="/js/jquery.mmenu.js" ></script><!-- 2015.06.30 download -->
+<script type="text/javascript" charset="utf-8" src="/js/common.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/json2.js"></script>
+<script type="text/javascript" charset="utf-8" src="/js/params.js"></script><!--  For Parameter -->
+
+<script type="text/javascript">
+   $(document).ready(function() {	
+	   
+		//-------------------------------------------------------------------
+		// 네비게이션 메뉴
+		//-------------------------------------------------------------------	   
+			 $("#my-menu").mmenu({
+	         // options
+				 slidingSubmenus: false
+			});   
+	      	var API = $("#my-menu").data( "mmenu" );      
+	      	$("#my-button").click(function() {
+				API.open();
+	      	});
+	      	$("#my-button").click(function() {
+				API.close();
+			});    
+			// 홈버튼		
+	      	$( "#btn_home" ).bind ("tap", function( event ) {
+				gourl = "/business/sc/main.html";  ;
+				goURL(gourl);
+	      	} ); // btn_home tap
+		 
+	      	
+	//-------------------------------------------------------------------
+   }); // ready
+
+   </script>
+
+</head>
+
+ <body id="mob_sub">
+<div data-role="page" id="page_notice"   > 
+	<!-- header  -->
+	<div data-role="header" data-position="fixed">		
+		<div id="mob_sub">		
+			<div id = "mob_header"  >		                	
+					<div id ="my-button" class="sch_hw" ></div>		        	
+		            <h1 class="">담당자 정보</h1>
+		           	<div id ="btn_home" class="home_hw" >
+		        	</div>
+	        </div>
+        </div>
+	</div>
+	<!-- header -->   
+  
+  <!-- Main -->
+	<div data-role="content">
+    <!-- Content -->
+    <section class="section_contectus">
+    	<!-- -->
+        <div class="fax">
+            <dl>
+                <dt>대표 팩스번호</dt>
+                <dd>02-3484-2304</dd>
+            </dl>
+        </div>
+        <!-- //-->
+    	<div class="dep">기술 DEP</div>
+    	<div> 
+        	<!-- 토목공종 담당 -->           
+            <dl>
+                <dt>토목공종 담당</dt>
+                <dd>
+                	<dl>
+                    	<dt><span class="name">김방철</span> 차장</dt>
+                        <dd>
+                        	<ul>
+                                <li>TEL<span>|</span>02-3484-2224</li>
+                                <li>E-mail<span>|</span>bucktool@dongbu.co.kr</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </dd>   
+            </dl>
+            
+            <!-- 건축공종 담당 -->           
+            <dl>
+                <dt>건축공종 담당</dt>
+                <dd>
+                	<dl>
+                    	<dt><span class="name">이형록</span> 차장</dt>
+                        <dd>
+                        	<ul>
+                                <li>TEL<span>|</span>02-3484-2305</li>
+                                <li>E-mail<span>|</span>ehrok@dongbu.co.kr</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </dd>   
+            </dl>
+            
+            <!-- 플랜트공종 담당 -->           
+            <dl>
+                <dt>플랜트공종 담당</dt>
+                <dd>
+                	<dl>
+                    	<dt><span class="name">김대환</span> 차장</dt>
+                        <dd>
+                        	<ul>
+                                <li>TEL<span>|</span>02-3484-2142</li>
+                                <li>E-mail<span>|</span>banchan@dongbu.co.kr</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </dd>   
+            </dl>
+            
+                    
+        </div>
+        <div class="dep">계약 DEP</div>
+    	<div> 
+        	<!-- 계약담당 -->           
+            <dl>
+                <dt>계약담당</dt>
+                <dd>
+                	<dl>
+                    	<dt><span class="name">유기은</span> 사원</dt>
+                        <dd>
+                        	<ul>
+                                <li>TEL<span>|</span>02-3484-2132</li>
+                                <li>E-mail<span>|</span>keyoo@dongbu.co.kr</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </dd>   
+            </dl>
+        </div>
+        
+        <div class="dep">시스템 담당</div>
+    	<div> 
+        	<!-- 시스템 담당 -->           
+            <dl>
+                <dt>시스템 담당</dt>
+                <dd>
+                	<dl>
+                    	<dt><span class="name">지승현</span> 대리</dt>
+                        <dd>
+                        	<ul>
+                                <li>TEL<span>|</span>02-2136-6086</li>
+                                <li>E-mail<span>|</span>redsharp@dongbu.com</li>
+                            </ul>
+                        </dd>
+                    </dl>
+                </dd>   
+            </dl>
+        </div>
+        
+        
+        
+        
+    </section>
+    <!-- Content //-->
+    
+  </div>
+  <!-- Main //--> 
+  
+    	<!-- footer -->	  
+	<nav id="my-menu">
+     <ul>
+       <li><span><b>사업자번호&nbsp;&nbsp;&nbsp;</b><b id="bizno_sub"></b></span></li><br>
+       <li><a href="/business/sc/noticeList.html"  target="_self"><img src="/images/menu_010.png" width="10%"> 공지사항</a></li>
+       <li><a href="/business/sc/contactusList.html"  target="_self"><img src="/images/menu_011.png" width="10%"> 담당자정보</a></li><br>      
+       <li><a href="/business/sc/sitedescList.html" target="_self"><img src="/images/menu_001.png" width="10%"> <b>현장설명</b></a></li>
+       <li><a href="/business/sc/bidList.html" target="_self"><img src="/images/menu_002.png" width="10%"> <b>전자입찰</b></a></li>
+       <li><a href="/business/sc/brkdnreviewList.html" target="_self"><img src="/images/menu_003.png" width="10%"> <b>내역검토</b></a></li>
+       <li><a href="/business/sc/contractList.html" target="_self"><img src="/images/menu_004.png" width="10%"> <b>전자계약</b></a></li>
+       <li><a href="/business/sc/corectorderList.html" target="_self"><img src="/images/menu_006.png" width="10%"> <b>시정조치</b></a></li>
+       <li><a href="/business/sc/resultList.html" target="_self"><img src="/images/menu_005.png" width="10%"> <b>결과분석 및 개선</b></a></li><br>   
+       <li><a href="/business/co/setupInfo.html" target="_self"><img src="/images/menu_012.png" width="10%"> 환경설정</a></li>    
+       <li><a href="javascript:deleteStorage()" target="_self"><img src="/images/menu_013.png" width="8%">&nbsp; 로그아웃</a></li>
+     </ul>
+	</nav>
+	 <!-- footer -->
+  
+   
+</div>
+</body>
+</html>

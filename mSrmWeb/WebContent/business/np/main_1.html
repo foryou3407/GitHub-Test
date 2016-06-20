@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>동부건설</title>
+<link rel="stylesheet" href="/css/basic.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="http://mmenu.frebsite.nl/mmenu/css/jquery.mmenu.css" />
+<script src="http://mmenu.frebsite.nl/js/jquery-1.8.3.min.js" type="text/javascript"></script>
+<script src="http://mmenu.frebsite.nl/mmenu/js/jquery.mmenu.min.all.js?v=5.2.0" type="text/javascript"></script>
+
+
+
+<script type="text/javascript">
+
+   $(function() {
+	    $("#my-menu").mmenu({
+	        slidingSubmenus: false
+	        }).on( 'click', 'a[href^="#/"]',
+	            function() {
+	                alert( "Thank you for clicking, but that's a demo link." );
+	                return false;
+	            }
+	        );
+	      var API = $("#my-menu").data( "mmenu" );
+	     
+	      $("#my-button").click(function() {
+	         API.open();
+	      });
+	      $("#my-button").click(function() {
+	         API.close();
+	      });
+	   });
+   
+</script>
+
+
+</head>
+
+<body>
+<nav id="my-menu">
+  <ul>
+    <li><a href="notice.html">공지사항</a></li>
+    <li><a href="#">담당자정보</a></li>
+    
+    <li><a href="#">현장설명</a></li>
+    <li><a href="#">전자입찰</a></li>
+    <li><a href="#">전자계약</a></li>
+    <li><a href="#">자재관리</a></li>
+    
+    <li><a href="#">환경설정</a></li>
+    <li><a href="#">로그아웃</a></li>    
+  </ul>
+</nav>
+
+<div id="wrap">
+
+<!-- Header -->
+  <div data-role="header" data-position="fixed" id="header">
+    <section>            
+      <button id="my-button" type="button" class="sch_hw"></button>
+      <h1 class="">
+        <a href="#" class="">
+          <img src="/images/logo.png" alt="동부건설">
+        </a>
+      </h1>
+    </section>
+  </div>
+<!-- Header //-->
+  
+  <!-- Main -->
+  <div id="ct_1">
+  	<ul class="secion_menu">
+    	<li>
+            <a href="">
+            <dl>
+                <dt>현장설명</dt>
+                <dd> <img src="/images/menu_001.png"></dd>
+                <em class="t_count">99</em>
+            </dl>
+            </a>
+        </li>        
+        <li>
+            <a href="">
+            <dl>
+                <dt>전자입찰</dt>
+                <dd> <img src="/images/menu_002.png"></dd>
+                <em class="t_count">99</em>
+            </dl>
+            </a>
+        </li>        
+        <li>
+            <a href="">
+            <dl>
+                <dt>전자계약</dt>
+                <dd> <img src="/images/menu_004.png"></dd>
+                <em class="t_count">99</em>
+            </dl>
+            </a>
+        </li>
+        <!--
+        <li>
+            <a href="">
+            <dl>
+                <dt>전자계약</dt>
+                <dd> <img src="images/menu_004.png"></dd>
+                <em class="t_count">99</em>
+            </dl>
+            </a>
+        </li>        
+        <li>
+            <a href="">
+            <dl>
+                <dt>안전점검</dt>
+                <dd> <img src="images/menu_005.png"></dd>
+                <em class="t_count">99</em>
+            </dl>
+            </a>
+        </li>        
+        <li>
+            <a href="">
+            <dl>
+                <dt>시정조치</dt>
+                <dd> <img src="images/menu_006.png"></dd>
+                <em class="t_count">99</em>
+            </dl>
+            </a>
+        </li>-->
+    </ul>
+  </div>
+  <!-- Main //-->  
+</div>
+</body>
+</html>
